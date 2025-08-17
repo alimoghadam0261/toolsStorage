@@ -18,6 +18,7 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->string('location');
             $table->string('Receiver');
+            $table->string('status');
             $table->timestamp('moved_at')->useCurrent();
             $table->timestamps();
         });

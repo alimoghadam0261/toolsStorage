@@ -10,7 +10,7 @@ class ToolsLocation extends Model
         'tools_information_id',
         'location',
         'moved_at',
-        'moved_at',
+        'status',
         'Receiver'
     ];
 

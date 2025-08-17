@@ -18,6 +18,7 @@
                                     <th scope="col">#</th>
                                     <th scope="col">محل </th>
                                     <th scope="col">تحویل گیرنده</th>
+                                    <th scope="col">وضعیت</th>
                                     <th scope="col">تاریخ</th>
 
                                 </tr>
@@ -28,6 +29,7 @@
                                         <th scope="row">{{$index+1}}</th>
                                         <td {{ $item->location == 'انبار مرکزی' ? 'style=background:#A6D6BCFF;' : 'style=background:none' }}>{{ $item->location }}</td>
                                         <td>{{$item->Receiver}}</td>
+                                        <td>{{$item->status}}</td>
                                         <td>{{jdate($item->moved_at)->format('y/m/d')}}</td>
 
                                     </tr>

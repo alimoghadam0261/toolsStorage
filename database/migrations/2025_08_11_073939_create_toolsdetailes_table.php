@@ -6,37 +6,32 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('toolsdetailes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tools_information_id')
-                ->constrained('toolsinformations')
-                ->cascadeOnDelete();
-            $table->enum('category',['tools','jam'])->default('tools');
-            $table->string('brand');
+            $table->foreignId('storage_id')->constrained('storages')->cascadeOnDelete();
+            $table->foreignId('tools_information_id')->constrained('toolsinformations')->cascadeOnDelete();
+            $table->string('category')->default('tools');
             $table->string('model');
+            $table->integer('count')->default(0);
             $table->string('Weight');
             $table->string('TypeOfConsumption');
             $table->string('size');
             $table->string('Receiver');
-            $table->string('price');
+            $table->decimal('price', 12, 2);
             $table->string('StorageLocation');
             $table->string('color')->default('blackDefault');
             $table->date('dateOfSale')->nullable();
             $table->date('dateOfexp')->nullable();
             $table->longText('content')->nullable();
-            $table->softDeletes();
+            $table->string('attach')->nullable(); // فایل عکس
+            $table->string('status');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('toolsdetailes');

@@ -33,8 +33,10 @@
                     <div class="col-md-12">
                         <div class="box-storage-admin">
                             <div class="row test-storage-info">
-                                <div class="col-md-6"><span>محموع ابزار آلات در انبار:{{$count}}  </span><span class="badge badge-info">
-                                       <button class="btn btn-outline-info"> <a href="">    مشاهده همه</a></button></span></div>
+                                <div class="col-md-6"><span>محموع ابزار آلات در انبار:{{$count}}  </span><span
+                                        class="badge badge-info">
+                                       <button class="btn btn-outline-info"> <a
+                                               href="">    مشاهده همه</a></button></span></div>
                                 <div class="col-md-6">
                                     <div class="row">
                                         <div class="col-md-4" dir="rtl">
@@ -58,9 +60,10 @@
                                 <thead class="table-light">
                                 <tr>
                                     <th>#</th>
+                                    <th>تصویر</th>
                                     <th>نام</th>
                                     <th>سریال</th>
-                                    <th>برند</th>
+                                    <th>تعداد</th>
                                     <th>مدل</th>
                                     <th>تحویل گیرنده</th>
                                     <th>قیمت</th>
@@ -72,25 +75,37 @@
                                 @foreach($tools as $index => $tool)
                                     <tr>
                                         <td>{{ $index+1 }}</td>
+                                        <td>
+                                            <img src="{{ asset('storage/tools/' . $tool->attach) }}" alt="Tool Image" />
+
+
+
+                                        </td>
+
+
                                         <td {{ trim($tool->name) == "انبارمرکزی" ? 'style="background:green"' : 'style="background:none"' }}>
                                             {{ $tool->name }}
                                         </td>
 
                                         <td>{{ $tool->serialNumber }}</td>
-                                        <td>{{ $tool->details->brand ?? '-' }}</td>
+                                        <td>{{ $tool->details->count ?? '-' }}</td>
                                         <td>{{ $tool->details->model ?? '-' }}</td>
                                         <td>{{ $tool->details->	Receiver ?? '-' }}</td>
                                         <td>{{ $tool->details->price ?? '-' }}</td>
-                                        <td>{{ jDate( $tool->details->created_at)->format('Y/m/d') }}
-                                        </td>
+                                        <td>{{ jDate( $tool->details->created_at)->format('Y/m/d') }}</td>
                                         <td class="text-center">
-                                            <a href="{{route('admin.tools.edit',$tool->id)}}"><button class="btn btn-sm btn-outline-warning">ویرایش</button></a>
+                                            <a href="{{route('admin.tools.edit',$tool->id)}}">
+                                                <button class="btn btn-sm btn-outline-warning">ویرایش</button>
+                                            </a>
 
                                             <a href="{{ route('admin.result.tools', $tool->id) }}">
                                                 <button class="btn btn-sm btn-info">گزارش</button>
                                             </a>
 
-                                            <button wire:click="delete({{ $tool->id }})" class="btn btn-sm btn-outline-danger" onclick="return confirm('آیا مطمئن هستید؟')">حذف</button>
+                                            <button wire:click="delete({{ $tool->id }})"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                    onclick="return confirm('آیا مطمئن هستید؟')">حذف
+                                            </button>
                                         </td>
                                     </tr>
                                 @endforeach

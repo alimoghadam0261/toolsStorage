@@ -32,12 +32,21 @@
                                 <input required type="text"  class="form-control" wire:model="Receiver">
                             </div>
                             <div class="col-md-3 mb-2">
-                                <label>برند</label>
-                                <input required type="text" class="form-control" wire:model="brand">
+                                <label>تعداد</label>
+                                <input required type="text" class="form-control" wire:model="count">
                             </div>
                             <div class="col-md-3 mb-2">
                                 <label>مدل</label>
-                                <input required type="text" class="form-control" wire:model="model">
+                                <input required type="number" class="form-control" wire:model="model">
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label>وضعیت</label>
+                                <select required class="form-select" wire:model="status">
+                                    <option value="">انتخاب کنید</option>
+                                    <option value="active">فعال</option>
+                                    <option value="inactive">غیرفعال</option>
+                                    <option value="broken">خراب</option>
+                                </select>
                             </div>
 
                             <div class="col-md-3 mb-2">

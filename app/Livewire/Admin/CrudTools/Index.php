@@ -9,8 +9,9 @@ class Index extends Component
 {
 
     public $toolId;
-    public $name, $serialNumber, $brand, $model, $Weight, $TypeOfConsumption,
-        $size, $price, $StorageLocation, $color, $dateOfSale, $dateOfexp, $category, $content,$Receiver;
+    public $name, $serialNumber, $count, $model, $Weight, $TypeOfConsumption,
+        $size, $price, $StorageLocation, $color, $status,
+        $dateOfSale, $dateOfexp, $category, $content,$Receiver;
     public $storages = [];
 
     public function mount($id)
@@ -19,7 +20,8 @@ class Index extends Component
         $this->toolId = $tool->id;
         $this->name = $tool->name;
         $this->serialNumber = $tool->serialNumber;
-        $this->brand = $tool->details->brand;
+        $this->count = $tool->details->count;
+        $this->status = $tool->details->status;
         $this->model = $tool->details->model;
         $this->Receiver = $tool->details->Receiver;
         $this->Weight = $tool->details->Weight;
@@ -50,7 +52,8 @@ class Index extends Component
 //   انبار مرکزی
         $info->details()->update([
             'category' => $this->category,
-            'brand' => $this->brand,
+            'count' => $this->count,
+            'status' => $this->status,
             'model' => $this->model,
             'Weight' => $this->Weight,
             'TypeOfConsumption' => $this->TypeOfConsumption,
@@ -82,6 +85,7 @@ class Index extends Component
         $tool->locations()->create([
             'location' => $newLocation,
             'Receiver' => $this->Receiver,
+            'status' => $this->status,
             'moved_at' => now()
         ]);
     }
