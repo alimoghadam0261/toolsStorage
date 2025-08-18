@@ -14,6 +14,7 @@ class Create extends Component
     public $storages = [];
     public $tools;
     public $toolId;
+    public $customPrefix;
 
     public $name, $serialNumber;
     public $category, $count, $model, $Weight, $TypeOfConsumption,
@@ -59,16 +60,47 @@ class Create extends Component
         $this->StorageLocation = $storage?->name;
     }
 
+//    private function generateUniqueSerial($category)
+//    {
+//        $prefix = $category === 'IPR-' ? 'IPR-' : 'tls';
+//        do {
+//            $number = random_int(10000, 99999);
+//            $serial = $prefix . $number;
+//        } while (ToolsInformation::where('serialNumber', $serial)->exists());
+//
+//        return $serial;
+//    }
     private function generateUniqueSerial($category)
     {
-        $prefix = $category === 'IPR-' ? 'IPR-' : 'tls';
-        do {
-            $number = random_int(10000, 99999);
-            $serial = $prefix . $number;
-        } while (ToolsInformation::where('serialNumber', $serial)->exists());
+        if ($category === 'IPR-') {
+            $prefix = 'IPR-';
+        } else {
+            // اگر کاربر چیزی انتخاب نکرده بود، پیش‌فرض 200
+            $prefix = $this->customPrefix ? $this->customPrefix . '-' : '200-';
+        }
 
-        return $serial;
+        // پیدا کردن آخرین سریال ذخیره شده در دیتابیس
+        $lastSerial = ToolsInformation::where('serialNumber', 'like', $prefix . '%')
+            ->orderBy('serialNumber', 'desc')
+            ->value('serialNumber');
+
+        if ($lastSerial) {
+            $lastNumber = (int) str_replace($prefix, '', $lastSerial);
+            $newNumber = $lastNumber + 1;
+        } else {
+            $newNumber = 1;
+        }
+
+        return $prefix . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
     }
+    public function updatedCustomPrefix($value)
+    {
+        if (!empty($this->category)) {
+            $this->serialNumber = $this->generateUniqueSerial($this->category);
+        }
+    }
+
+
 
     public function save()
     {
@@ -89,31 +121,34 @@ class Create extends Component
             'dateOfSale' => 'required|date',
             'dateOfexp' => 'required|date',
 
-            // 👇 این خط کلید مشکل بود: ولیدیشن برای storage_id
+
             'storage_id' => 'required|exists:storages,id',
 
-            // اگر فقط عکس می‌خوای:
+
             'attach' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // ایجاد رکورد اصلی
+
         $info = ToolsInformation::create([
             'name' => $this->name,
             'serialNumber' => $this->serialNumber
         ]);
 
-        // آپلود فایل (اگر انتخاب شده)
+
         $fileName = null;
         if ($this->attach) {
-            $fileName = $this->attach->store('tools', 'public');
+            $randomNumber = rand(1000, 9999);
+            $currentTime = now()->format('YmdHis');
+            $fileName = $randomNumber . '_' . $currentTime . '.' . $this->attach->getClientOriginalExtension();
+            $this->attach->storeAs('tools', $fileName, 'public');
         }
 
-        // اگر ستون متنی StorageLocation در جدول داری و تهی بود، از نام انبار انتخابی پرش کن
+
         if (empty($this->StorageLocation)) {
             $this->StorageLocation = optional(Storage::find($this->storage_id))->name;
         }
 
-        // ایجاد جزئیات — حتماً storage_id را بفرست
+
         $info->details()->create([
             'storage_id'       => $this->storage_id,
             'category'         => $this->category,
@@ -125,7 +160,7 @@ class Create extends Component
             'TypeOfConsumption'=> $this->TypeOfConsumption,
             'size'             => $this->size,
             'price'            => $this->price,
-            'StorageLocation'  => $this->StorageLocation, // فقط اگر ستون متنی‌اش را نگه می‌داری
+            'StorageLocation'  => $this->StorageLocation,
             'color'            => $this->color,
             'dateOfSale'       => $this->dateOfSale,
             'dateOfexp'        => $this->dateOfexp,
@@ -133,7 +168,7 @@ class Create extends Component
             'attach'           => $fileName,
         ]);
 
-        // ایجاد location log (اگر رابطه‌اش را داری)
+
         $info->locations()->create([
             'location' => $this->StorageLocation,
             'Receiver' => $this->Receiver,

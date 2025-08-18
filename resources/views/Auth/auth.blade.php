@@ -11,6 +11,17 @@
     'resources/css/app.css',
     'resources/js/app.js'
     ])
+
+    <style>
+        .pagehomeLogin{
+            width: 100%;
+            height: 100vh;
+            background-image: url("{{ asset('img/111.png') }}");
+            background-position: center;
+            background-size: cover;
+        }
+    </style>
+
 </head>
 <body dir="rtl" class="pagehomeLogin">
 

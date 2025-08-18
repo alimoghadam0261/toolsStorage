@@ -90,6 +90,9 @@ input::placeholder {
     font-size: .7em;
 }
 
+label{
+    font-size: .9em;
+}
 
 @font-face {
     font-family: 'IRANSans';
@@ -125,7 +128,6 @@ body {
 /*==================home page login============*/
 .pagehomeLogin{
 
-    background: #f2f3f5;
 
 }
 .topcontent{
@@ -161,16 +163,17 @@ body {
 
 .form-login{
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-
+background: rgba(255,255,255,0.5);
     padding:15px;
     height: auto;
     width:35em ;
     border: 1px solid green;
     transition: .5s all;
+
 }
 .form-login:hover{
     transform-origin: center;
-    transform: scale(1.05);
+    transform: scale(1.01);
     box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 }
 

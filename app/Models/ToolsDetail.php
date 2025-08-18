@@ -15,7 +15,7 @@ class ToolsDetail extends Model
     protected $table = 'toolsdetailes';
     public function information()
     {
-        return $this->belongsTo(ToolsInformation::class, 'tools_information_id');
+        return $this->belongsTo(ToolsInformation::class);
     }
     public function storage()
     {

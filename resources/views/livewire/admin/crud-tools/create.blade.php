@@ -16,6 +16,16 @@
                                 <input required type="text" class="form-control" wire:model="name">
                             </div>
 
+{{--                            <div class="col-md-3 mb-2">--}}
+{{--                                <label>دسته بندی:</label>--}}
+{{--                                <select required class="form-select" wire:model.live="category">--}}
+{{--                                    <option value="" selected>انتخاب کنید</option>--}}
+{{--                                    <option value="tools">مصرفی</option>--}}
+{{--                                    <option value="IPR-">سرمایه ای</option>--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
+
+
                             <div class="col-md-3 mb-2">
                                 <label>دسته بندی:</label>
                                 <select required class="form-select" wire:model.live="category">
@@ -24,6 +34,21 @@
                                     <option value="IPR-">سرمایه ای</option>
                                 </select>
                             </div>
+
+                            {{-- فقط وقتی دسته‌بندی IPR- نیست، این سلکت نمایش داده بشه --}}
+                            @if($category && $category !== 'IPR-')
+                                <div class="col-md-3 mb-2">
+                                    <label>پیشوند اختصاصی</label>
+                                    <select class="form-select" wire:model.live="customPrefix">
+                                        <option value="">انتخاب کنید</option>
+                                        <option value="200">200</option>
+                                        <option value="300">300</option>
+                                        <option value="400">400</option>
+                                    </select>
+                                </div>
+                            @endif
+
+
 
                             <div class="col-md-3 mb-2">
                                 <label>شماره سریال</label>

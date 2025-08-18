@@ -11,11 +11,13 @@
                 <hr>
                 <div class="widgets-admin">
                     <div class="box-widget-admin" style="background: #ddf0f8">
+                        <a href="{{route('admin.storages.create')}}">
                         <br>
 
-                        <h6><a href="{{route('admin.storages.create')}}">
+                        <h5 style="transform: translateY(-.5em)">
                                 ثبت انبار و سایت جدید
-                            </a></h6>
+                            </h5>
+                        </a>
                     </div>
 
                 </div>

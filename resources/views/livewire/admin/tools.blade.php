@@ -6,13 +6,14 @@
                 <hr>
                 <div class="widgets-admin">
                     <div class="box-widget-admin" style="background: #ddf0f8">
+                        <a href="{{route('admin.tools.create')}}">
                         <br>
 
-                        <h6><a href="{{route('admin.tools.create')}}">
+                            <h5 style="transform: translateY(-.5em)">
                                 ثبت ابزار جدید
-                            </a></h6>
+                            </h5>
 
-                    </div>
+                    </a></div>
 
 
                 </div>
@@ -24,8 +25,12 @@
                 @endif
                 <br>
                 <div class="search-storage-admin" dir="rtl">
-                    <input type="text" placeholder="جستجو : نام ابزار یا شماره ابزار را وارد نمایید "
-                           class="form-control">
+                    <input
+                        type="text"
+                        placeholder="جستجو : نام ابزار یا شماره ابزار را وارد نمایید"
+                        class="form-control"
+                        wire:model.live="searchTerm"
+                    >
                 </div>
                 <br>
                 <div class="show-storage-admin">
@@ -37,23 +42,22 @@
                                         class="badge badge-info">
                                        <button class="btn btn-outline-info"> <a
                                                href="">    مشاهده همه</a></button></span></div>
+
                                 <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="col-md-4" dir="rtl">
-                                            <label for="">فیلتر بر اساس </label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <select wire:model.live="sortBy" class=" form-select-sm" name="" id="">
-                                                <option value="data">تاریخ</option>
+
+
+                                            <label for="">فیلتر بر اساس</label>
+
+                                            <select wire:model.live="sortBy" class="form-select-sm" name="" id="">
+                                                <option value="date">تاریخ</option>
                                                 <option value="count">تعداد</option>
                                                 <option value="price">قیمت</option>
                                             </select>
 
-                                        </div>
-
-                                    </div>
 
                                 </div>
+
+
                             </div>
                             <br>
                             <table class="table table-bordered table-hover">
@@ -73,17 +77,19 @@
                                 </thead>
                                 <tbody>
                                 @foreach($tools as $index => $tool)
-                                    <tr>
+
+                                    <tr style="cursor:pointer;" wire:click="goToShow({{ $tool->id }})">
                                         <td>{{ $index+1 }}</td>
                                         <td>
-                                            <img src="{{ asset('storage/tools/' . $tool->attach) }}" alt="Tool Image" />
-
-
-
+                                            @if($tool->details && $tool->details->attach)
+                                                <img src="{{ asset('storage/tools/' . $tool->details->attach) }}" width="50" alt="{{ $tool->name }}" />
+                                            @else
+                                                <img src="{{ asset('img/default.png') }}" width="50" alt="{{ $tool->name }}" />
+                                            @endif
                                         </td>
 
 
-                                        <td {{ trim($tool->name) == "انبارمرکزی" ? 'style="background:green"' : 'style="background:none"' }}>
+                                        <td {{ trim($tool->name) == "انبار مرکزی" ? 'style="background:green"' : 'style="background:none"' }}>
                                             {{ $tool->name }}
                                         </td>
 
@@ -92,7 +98,14 @@
                                         <td>{{ $tool->details->model ?? '-' }}</td>
                                         <td>{{ $tool->details->	Receiver ?? '-' }}</td>
                                         <td>{{ $tool->details->price ?? '-' }}</td>
-                                        <td>{{ jDate( $tool->details->created_at)->format('Y/m/d') }}</td>
+                                        <td>
+                                            @if($tool->details && $tool->details->created_at)
+                                                {{ jDate($tool->details->created_at)->format('Y/m/d') }}
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+
                                         <td class="text-center">
                                             <a href="{{route('admin.tools.edit',$tool->id)}}">
                                                 <button class="btn btn-sm btn-outline-warning">ویرایش</button>
@@ -108,6 +121,7 @@
                                             </button>
                                         </td>
                                     </tr>
+
                                 @endforeach
                                 </tbody>
                             </table>

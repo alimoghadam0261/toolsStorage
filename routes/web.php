@@ -33,6 +33,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::get('/tools', App\Livewire\Admin\Tools::class)->name('admin.tools');
         Route::get('/tools/create', App\Livewire\Admin\CrudTools\Create::class)->name('admin.tools.create');
         Route::get('/tools/edit/{id}', App\Livewire\Admin\CrudTools\index::class)->name('admin.tools.edit');
+        Route::get('/tools/show/{id}', App\Livewire\Admin\CrudTools\Show::class)->name('admin.tools.show');
 
         Route::get('/info', App\Livewire\Admin\ResultInfo::class)->name('admin.result-info');
     Route::get('/info/tools/{toolId}', App\Livewire\Admin\Infos\Tools::class)->name('admin.result.tools');
