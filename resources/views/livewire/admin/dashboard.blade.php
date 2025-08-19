@@ -8,11 +8,11 @@
               <div class="widgets-admin">
                   <div class="box-widget-admin">
                       <h6>مجموع ابزارآلات ثبت شده</h6>
-                      <p>1234</p>
+                      <p>{{$countTools}}</p>
                   </div>
                   <div class="box-widget-admin">
                       <h6>مجموع جم ثبت شده </h6>
-                      <p>1234</p>
+                      <p>{{$countJam}}</p>
                   </div>
                   <div class="box-widget-admin">
                       <h6>مجموع تعداد ابزار خارج از انبار</h6>

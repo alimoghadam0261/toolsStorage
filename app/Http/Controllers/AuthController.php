@@ -30,7 +30,7 @@ class AuthController extends Controller
         $data['mobile'] = Hash::make($data['mobile']);
         $user = User::create($data);
         $token = $user->createToken('auth_token')->plainTextToken;
-        return redirect()->back()->with('success', 'ثبت‌نام با موفقیت انجام شد ✅');
+        return redirect()->route('login.form');
 
     }
 
@@ -70,13 +70,17 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('cardNumber', $data['cardNumber'])->first();
+
         if (!$user || !Hash::check($data['mobile'], $user->mobile)) {
             return response([
                 'message' => "همکار گرامی ، شماره پرسنلی یا رمز عبور اشتباه می باشد"
             ], 401);
         }
 
-        Auth::login($user);
+            Auth::login($user);
+
+
+
 
         Useractivities::create([
             'user_id' => $user->id,

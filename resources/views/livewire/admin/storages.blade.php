@@ -1,14 +1,14 @@
+
 <div dir="rtl" class="dashboard-admin">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-2">
                 @livewire('component.admin.sidebar')
             </div>
-            <div class="col-md-10">
+            <div class="col-md-10 storage-de">
                 @livewire('component.admin.topmenu')
                 <hr>
-                <h4>اطلاعات انبار و سایت ها</h4>
-                <hr>
+
                 <div class="widgets-admin">
                     <div class="box-widget-admin" style="background: #ddf0f8">
                         <a href="{{route('admin.storages.create')}}">

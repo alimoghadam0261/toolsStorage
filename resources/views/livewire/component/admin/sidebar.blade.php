@@ -15,20 +15,36 @@
 
         <br>
         <ul>
-            <li><i class="fa fa-gauge fa-sm"></i><a href="{{route('admin.dashboard')}}"> داشبورد</a></li>
-            <li><i class="fa fa-tools fa-sm"></i><a href="{{route('admin.tools')}}"> موجودی ابزار </a></li>
-            <li><i class="fa fa-database fa-sm"></i><a href="{{route('admin.storages')}}"> انبار و سایت</a></li>
+            <li><i class="fa fa-gauge fa-sm"></i>
+                <a style="{{request()->routeIs('admin.dashboard') ?
+ 'background:#0AC7FD33; padding:.5em; border-radius:5px;' : 'background:none;'  }}"
+                   href="{{route('admin.dashboard')}}"> داشبورد</a></li>
+
+            <li><i class="fa fa-tools fa-sm"></i>
+                <a style="{{request()->routeIs('admin.tools') ?  'background:#0AC7FD33; padding:.5em; border-radius:5px;' : 'background:none;'  }}"
+                    href="{{route('admin.tools')}}"> موجودی ابزار </a></li>
+
+            <li><i class="fa fa-database fa-sm"></i>
+                <a style="{{request()->routeIs('admin.storages')?  'background:#0AC7FD33; padding:.5em; border-radius:5px;' : 'background:none;'  }}"
+                    href="{{route('admin.storages')}}"> انبار و سایت</a></li>
 
 
 
             @if(auth()->user()->role == 'admin')
-                <li><i class="fa fa-comments fa-sm"></i><a href="{{route('admin.result-info')}}"> گزارشات</a></li>
-                <li><i class="fa fa-users fa-sm"></i> <a href="{{route('admin.personal')}}"> پرسنل</a></li>
+                <li><i class="fa fa-comments fa-sm"></i>
+                    <a
+                        style="{{request()->routeIs('admin.result-info')?  'background:#0AC7FD33; padding:.5em; border-radius:5px;' : 'background:none;'  }}"
+                        href="{{route('admin.result-info')}}"> گزارشات</a></li>
+
+                <li><i class="fa fa-users fa-sm"></i>
+                    <a style="{{request()->routeIs('admin.personal')?  'background:#0AC7FD33; padding:.5em; border-radius:5px;' : 'background:none;'  }}"
+                        href="{{route('admin.personal')}}"> پرسنل</a></li>
             @else
                 <li><i class="fa fa-comments fa-sm"></i><a href="" disabled style=" pointer-events: none; color: gray;  text-decoration: none;"> گزارشات</a></li>
                 <li><i class="fa fa-users fa-sm"></i><a href="" disabled style=" pointer-events: none; color: gray;  text-decoration: none;"> پرسنل</a></li>
             @endif
-            <li><i class="fa fa-comments fa-sm"></i><a href=""> پشتیبانی</a></li>
+            <li><i class="fa fa-comments fa-sm"></i>
+                <a href=""> پشتیبانی</a></li>
 
         </ul>
         <br><br><br><br>

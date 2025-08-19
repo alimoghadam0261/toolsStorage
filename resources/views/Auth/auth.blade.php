@@ -39,7 +39,7 @@
     <br>
     <div class="content-home-page">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 img-login-form">
                 <img src="./img/3.png" alt="leader" width="600">
             </div>
 
@@ -93,7 +93,7 @@
                     </div>
                 </div>
                 <br>
-                <p>
+                <p class="info-login-page">
                    برای دریافت  نام کاربری و رمز عبور به مدیریت بخش صنایع مراجعه فرمایید.
                 </p>
             </div>

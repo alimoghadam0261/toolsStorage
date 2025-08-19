@@ -50,7 +50,7 @@ class Tools extends Component
         }
 
         // بارگذاری داده‌ها
-        $this->tools = $query->take(15)->get();
+        $this->tools = $query->take(2222)->get();
 
 
     }
