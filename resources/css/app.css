@@ -23,13 +23,10 @@ body.dark-mode a {
 }
 
 body.dark-mode .sidebar-component {
-    background: #1e1f22;
+    background: #2b2d30;
     border-left: 1px solid #444;
 }
-body.dark-mode .box-show-detail{
-    color: #edebeb;
-    background: #303051;
-}
+
 body.dark-mode .sidebar-component ul li a {
     color: #cfd8dc;
     /*background: #59ba59;*/
@@ -46,7 +43,7 @@ body.dark-mode .topmenu-component {
 }
 
 body.dark-mode .dashboard-admin {
-    background: #2b2d30;
+    background: #1e1f22;
 }
 
 body.dark-mode .box-widget-admin,
@@ -67,9 +64,7 @@ body.dark-mode button.btn-primary {
     background-color: #1976d2;
     border-color: #1976d2;
 }
-.test{
-    background: #242424;
-}
+
 /* سایر کامپوننت ها و المان‌ها */
 
 /*==============================*/
@@ -135,6 +130,13 @@ body {
 .fa-trash:hover {
     color: #b52b2b;
 }
+
+/*li {*/
+/*    font-size:.8em;*/
+/*    font-weight: bold;*/
+/*}*/
+
+
 
 /*==================home page login============*/
 .pagehomeLogin {
@@ -275,13 +277,73 @@ body {
 /*=================================================================*/
 /*=================================================================*/
 
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar-menu li {
+    position: relative;
+}
+.sidebar-menu a {
+    display: block;
+    padding: 10px;
+    color: #5e5959;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.6s;
+    font-size:.8em;
+
+}
+.sidebar-menu a:hover {
+    background: rgba(10,199,253,0.2);
+
+}
+
+/* استایل زیرمنو */
+.submenu {
+    max-height: 0;
+    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+    border-radius: 6px;
+    margin: 5px 0 0 0;
+    padding: 0;
+    list-style: none;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+    opacity: 0;
+    transform: translateX(-2em);
+}
+.submenu li a {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    color: #ddd;
+    transition: .5s all;
+}
+.submenu li a:hover {
+    background: rgba(25, 187, 223, 0.1);
+    color: #2b2828;
+
+}
+
+/* وقتی روی li هاور بشه */
+.has-submenu:hover > .submenu {
+    max-height: 500px; /* به اندازه‌ای زیاد که همه آیتم‌ها جا بشن */
+    opacity: 1;
+}
+
+
+
+
+
+
+
 .sidebar-component {
     border-left: 1px solid gray;
     height: 100vh;
     width: 17%;
     text-align: center;
     direction: rtl;
-    background: #f2f3f5;
+    background: #d9dee7;
     overflow: hidden;
     display: block;
     position: fixed;
@@ -289,12 +351,7 @@ body {
 }
 
 
-.sidebar-component.collapsed {
-    width: 0;
-    padding: 0;
-    /* اگر خواستی محتوای داخلی را هم مخفی کنی */
-    display: none;
-}
+
 
 
 .info-user1, .info-user2 {
@@ -320,6 +377,7 @@ body {
     text-decoration: none;
     color: #1a202c;
     font-weight: bold;
+    font-size: .7em;
 
 }
 
@@ -491,7 +549,7 @@ thead th, tbody tr {
 }
 
 .img-single-tools {
-    box-shadow: rgb(7, 29, 32) 0px 20px 30px -10px;
+    box-shadow: rgb(9, 76, 40) 0px 20px 30px -10px;
     width: 200px;
 }
 

@@ -1,20 +1,16 @@
-
-<div dir="rtl" class="dashboard-admin">
+<div class="dashboard-admin">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-2">
-                @livewire('component.admin.sidebar')
-            </div>
-            <div class="col-md-10 storage-de">
+            <div class="col-md-10">
                 @livewire('component.admin.topmenu')
                 <hr>
-
+                <br>
                 <div class="widgets-admin">
                     <div class="box-widget-admin" style="background: #ddf0f8">
                         <a href="{{route('admin.storages.create')}}">
-                        <br>
+                            <br>
 
-                        <h5 style="transform: translateY(-.5em)">
+                            <h5 style="transform: translateY(-.5em)">
                                 ثبت انبار و سایت جدید
                             </h5>
                         </a>
@@ -33,12 +29,15 @@
                            class="form-control">
                 </div>
                 <br>
+
+
                 <div class="show-storage-admin">
 
-                    <div class="col-md-12">
+                    <div class="col-md-12" dir="rtl">
                         <div class="box-storage-admin">
                             <div class="row test-storage-info">
-                                <div class="col-md-6"><span>محموع تعداد انبار و سایت: {{$count}} </span><span class="badge badge-info"> </span>
+                                <div class="col-md-6"><span>محموع تعداد انبار و سایت: {{$count}} </span><span
+                                        class="badge badge-info"> </span>
 
                                 </div>
                                 <br>
@@ -49,8 +48,8 @@
                                         <th>نام</th>
                                         <th>لوکیشن</th>
                                         <th>نام مسئول</th>
-                                        <th >توضیحات</th>
-                                        <th >عملیات</th>
+                                        <th>توضیحات</th>
+                                        <th>عملیات</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -80,4 +79,13 @@
                         </div>
                     </div>
                 </div>
+
+            </div>
+
+            <div class="col-md-2">
+                @livewire('component.admin.sidebar')
+            </div>
+        </div>
+    </div>
+</div>
 

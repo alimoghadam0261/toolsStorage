@@ -27,13 +27,27 @@ return new class extends Migration
             $table->longText('content')->nullable();
             $table->string('attach')->nullable(); // فایل عکس
             $table->string('status');
-            $table->timestamps();
+
+            $table->unsignedInteger('qty_total')->default(0);
+            $table->unsignedInteger('qty_in_use')->default(0);
+            $table->unsignedInteger('qty_damaged')->default(0);
+            $table->unsignedInteger('qty_lost')->default(0);
+
+            $table->unique(['toolsinformation_id', 'storage_id'], 'ux_tool_storage');
+            $table->index(['storage_id']);
+
+
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('toolsdetailes');
+        Schema::table('toolsdetailes', function (Blueprint $table) {
+            $table->dropUnique('ux_tool_storage');
+            $table->dropIndex(['storage_id']);
+
+        });
     }
 };

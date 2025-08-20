@@ -29,7 +29,7 @@
     <div class="topcontent">
         <div class="row">
             <div class="col-md-6 logo-home-page">  <div ><img src="./img/1.png" alt="logo" width="50" class="mt-2 spin-x"></div><div class="mt-3 mx-3" >شرکت تعمیرات نیروگاهی ایران</div></div>
-            <div class="col-md-6"><h2 class=" mt-2" style="transform: translateX(25%)"> برنامه انبار مرکزی صنایع</h2></div>
+            <div class="col-md-6"><h2 class=" mt-2" style="transform: translateX(25%)"> Iran Power Plant Repairs</h2></div>
 
 
 

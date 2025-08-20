@@ -45,6 +45,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::patch('/users/{id}/restore', [AuthController::class, 'restore'])->name('admin.users.restore');
     Route::delete('/users/{id}/force', [AuthController::class, 'forceDelete'])->name('admin.users.forceDelete');
 
+        Route::get('/transfer/index', App\Livewire\Admin\Transfer\Index::class)->name('admin.transfer.index');
+        Route::get('/transfer/form', App\Livewire\Admin\Transfer\TransferForm::class)->name('admin.transfer.form');
 
 
 
