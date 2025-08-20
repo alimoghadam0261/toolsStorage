@@ -24,7 +24,7 @@
                                 <span><strong>نام:</strong></span><br><span>{{$tool->name}}</span>
                             </div>
                             <div class="box-show-detail">
-                                <span><strong>دسته بندی:</strong></span><br><span>{{$tool->details->category}}</span>
+                                <span><strong>دسته بندی:</strong></span><br><span>{{$tool->details->category=='IPR-' ? 'سرمایه ای':'مصرفی'}}</span>
                             </div>
                             <div class="box-show-detail">
                                 <span><strong> شماره سریال:</strong></span><br><span

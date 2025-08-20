@@ -14,22 +14,25 @@
 /* Dark Mode Styles */
 
 body.dark-mode {
-    background-color: #121212;
+    background-color: #2b2d30;
     color: #e0e0e0;
 }
 
 body.dark-mode a {
-    color: #80cbc4; /* رنگ لینک‌ها در دارک مود */
+    color: #bfdddb; /* رنگ لینک‌ها در دارک مود */
 }
 
 body.dark-mode .sidebar-component {
-    background: #1f1f1f;
+    background: #1e1f22;
     border-left: 1px solid #444;
 }
-
+body.dark-mode .box-show-detail{
+    color: #edebeb;
+    background: #303051;
+}
 body.dark-mode .sidebar-component ul li a {
     color: #cfd8dc;
-    background: #59ba59;
+    /*background: #59ba59;*/
 }
 
 body.dark-mode .sidebar-component ul li:hover {
@@ -38,12 +41,12 @@ body.dark-mode .sidebar-component ul li:hover {
 }
 
 body.dark-mode .topmenu-component {
-    background: #2e2828;
+    background: #2b2d30;
     color: #bdb9b9;
 }
 
 body.dark-mode .dashboard-admin {
-    background: #2e2828;
+    background: #2b2d30;
 }
 
 body.dark-mode .box-widget-admin,
@@ -64,7 +67,9 @@ body.dark-mode button.btn-primary {
     background-color: #1976d2;
     border-color: #1976d2;
 }
-
+.test{
+    background: #242424;
+}
 /* سایر کامپوننت ها و المان‌ها */
 
 /*==============================*/
@@ -486,7 +491,7 @@ thead th, tbody tr {
 }
 
 .img-single-tools {
-    box-shadow: rgb(9, 76, 40) 0px 20px 30px -10px;
+    box-shadow: rgb(7, 29, 32) 0px 20px 30px -10px;
     width: 200px;
 }
 
