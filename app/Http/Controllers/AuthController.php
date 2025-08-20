@@ -30,7 +30,7 @@ class AuthController extends Controller
         $data['mobile'] = Hash::make($data['mobile']);
         $user = User::create($data);
         $token = $user->createToken('auth_token')->plainTextToken;
-        return redirect()->route('login.form');
+        return redirect()->back()->with('success', 'کاربر جدید با موفقیت ثبت شد ✅');
 
     }
 
