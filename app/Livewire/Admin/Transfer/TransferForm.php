@@ -8,6 +8,7 @@ use App\Models\ToolsDetail;
 use App\Models\Transfer;
 use App\Models\Transfer_items;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Livewire\Component;
 
 class TransferForm extends Component
@@ -82,18 +83,45 @@ class TransferForm extends Component
                     throw new \Exception("ابزار انتخاب‌شده در انبار مبدا یافت نشد.");
                 }
 
-                // بررسی وجود information_id
-//                if (!$fromTool->information_id) {
-//                    throw new \Exception("ابزار انتخاب‌شده فاقد اطلاعات پایه است.");
-//                }
-
                 if ($fromTool->count < $item['qty']) {
                     throw new \Exception("موجودی ابزار کافی نیست.");
                 }
 
+                // کم کردن از موجودی انبار مبدا
+                $fromTool->decrement('count', $item['qty']);
+
+                // پیدا کردن یا ساخت رکورد در انبار مقصد
+                $toTool = ToolsDetail::firstOrCreate(
+                    [
+                        'tools_information_id' => $fromTool->tools_information_id,
+                        'storage_id'           => $this->toStorage,
+                    ],
+                    [
+                        'category'         => $fromTool->category,
+                        'status'           => $fromTool->status,
+                        'model'            => $fromTool->model,
+                        'Weight'           => $fromTool->Weight,
+                        'Receiver'         => $fromTool->Receiver,
+                        'TypeOfConsumption'=> $fromTool->TypeOfConsumption,
+                        'size'             => $fromTool->size,
+                        'price'            => $fromTool->price,
+                        'StorageLocation'  => optional(Storage::find($this->toStorage))->name,
+                        'color'            => $fromTool->color,
+                        'dateOfSale'       => $fromTool->dateOfSale,
+                        'dateOfexp'        => $fromTool->dateOfexp,
+                        'content'          => $fromTool->content,
+                        'attach'           => $fromTool->attach,
+                        'count'            => 0,
+                    ]
+                );
+
+                // اضافه کردن موجودی به انبار مقصد
+                $toTool->increment('count', $item['qty']);
+
+                // ثبت آیتم انتقال
                 Transfer_items::create([
                     'transfer_id'        => $transfer->id,
-                    'toolsinformation_id'=> $fromTool->tools_information_id, // استفاده مستقیم از information_id
+                    'toolsinformation_id'=> $fromTool->tools_information_id,
                     'toolsdetailes_id'   => $fromTool->id,
                     'qty'                => $item['qty'],
                     'damaged_qty'        => 0,
@@ -101,10 +129,11 @@ class TransferForm extends Component
                     'note'               => null,
                 ]);
             }
+
         });
 
         $this->reset();
-        session()->flash('success', 'انتقال با موفقیت ثبت شد.');
+        return redirect()->route('admin.transfer.index')->with('success', 'ابزار جدید با موفقیت ثبت شد ✅');
     }
 
     public function render()
