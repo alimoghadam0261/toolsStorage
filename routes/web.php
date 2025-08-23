@@ -42,6 +42,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::get('/transfer/index', App\Livewire\Admin\Transfer\Index::class)->name('admin.transfer.index');
     Route::get('/transfer/form', App\Livewire\Admin\Transfer\TransferForm::class)->name('admin.transfer.form');
+    Route::get('/transfer/show/{id}', App\Livewire\Admin\Transfer\Show::class)->name('admin.transfer.show');
 
 
 });

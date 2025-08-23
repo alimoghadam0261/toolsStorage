@@ -16,7 +16,7 @@ class ToolsDetail extends Model
         // فیلدهای قدیمی
         'tools_information_id','category','count','model','Weight','TypeOfConsumption',
         'attach','status','size','price','StorageLocation','color','dateOfSale',
-        'dateOfexp','content','Receiver','storage_id',
+        'dateOfexp','content','Receiver','storage_id','companynumber',
 
         // فیلدهای جدید مدیریت موجودی
         'qty_total','qty_in_use','qty_damaged','qty_lost',

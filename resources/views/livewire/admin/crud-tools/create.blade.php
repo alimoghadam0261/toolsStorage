@@ -31,6 +31,7 @@
                                 <select required class="form-select" wire:model.live="category">
                                     <option value="" selected>انتخاب کنید</option>
                                     <option value="tools">مصرفی</option>
+                                    <option value="abzar">ابزار</option>
                                     <option value="IPR-">سرمایه ای</option>
                                 </select>
                             </div>
@@ -53,6 +54,11 @@
                             <div class="col-md-3 mb-2">
                                 <label>شماره سریال</label>
                                 <input readonly type="text" class="form-control" wire:model="serialNumber">
+                            </div>
+
+                            <div class="col-md-3 mb-2">
+                                <label>شماره سریال شرکتی:</label>
+                                <input  type="number" class="form-control" wire:model="companynumber">
                             </div>
 
                             <div class="col-md-3 mb-2">

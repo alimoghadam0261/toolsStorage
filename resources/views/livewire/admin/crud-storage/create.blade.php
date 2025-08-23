@@ -27,7 +27,7 @@
                         </div>
                         <div class="col-md-6 form-tools-create" >
 
-                            <label for="">مسئول سایت</label>
+                            <label for="">مدیر پروژه</label>
                             <input wire:model="manager" class="form-control col-md-1" type="text" placeholder="مثال :آقای کریمایی" required>
                             <br>
                             <label for="">توضیحات</label>

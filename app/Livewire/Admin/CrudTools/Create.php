@@ -16,7 +16,7 @@ class Create extends Component
     public $toolId;
     public $customPrefix;
 
-    public $name, $serialNumber;
+    public $name, $serialNumber,$companynumber;
     public $category, $count, $model, $Weight, $TypeOfConsumption,
         $size, $price, $color, $dateOfSale, $dateOfexp, $Receiver,
         $content, $attach, $status;
@@ -74,7 +74,22 @@ class Create extends Component
     {
         if ($category === 'IPR-') {
             $prefix = 'IPR-';
-        } else {
+        }
+        else if ($category === 'abzar') {
+            $prefix = $this->customPrefix ? $this->customPrefix . '-' : 'abzar-';
+            $lastSerial = ToolsInformation::where('serialNumber', 'like', $prefix . '%')
+                ->orderBy('serialNumber', 'desc')
+                ->value('serialNumber');
+
+
+            $lastNumber = (int) str_replace($prefix, '', $lastSerial);
+
+            $newNumber = $lastNumber + 1;
+        }
+
+
+
+        else {
             // اگر کاربر چیزی انتخاب نکرده بود، پیش‌فرض 200
             $prefix = $this->customPrefix ? $this->customPrefix . '-' : '200-';
         }
@@ -152,6 +167,7 @@ class Create extends Component
         $info->details()->create([
             'storage_id'       => $this->storage_id,
             'category'         => $this->category,
+            'companynumber'         => $this->companynumber,
             'count'            => $this->count,
             'status'           => $this->status,
             'model'            => $this->model,
@@ -188,7 +204,7 @@ class Create extends Component
             'toolId', 'name', 'serialNumber', 'category', 'count', 'model',
             'Weight', 'TypeOfConsumption', 'size', 'price',
             'color', 'dateOfSale', 'dateOfexp', 'content', 'isEdit', 'Receiver',
-            'status', 'attach', 'storage_id', 'StorageLocation'
+            'status', 'attach', 'storage_id', 'StorageLocation','companynumber'
         ]);
     }
 

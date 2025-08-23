@@ -18,6 +18,8 @@ class TransferForm extends Component
     public $toStorage;
     public $selectedTool;
     public $qty;
+    public $status;
+    public $note;
 
     public $tools = [];
     public $transferItems = [];
@@ -58,6 +60,7 @@ class TransferForm extends Component
             'fromStorage'   => 'required|different:toStorage',
             'toStorage'     => 'required',
             'transferItems' => 'required|array|min:1',
+
         ], [
             'fromStorage.required'   => 'انبار مبدا الزامی است.',
             'toStorage.required'     => 'انبار مقصد الزامی است.',
@@ -66,11 +69,13 @@ class TransferForm extends Component
         ]);
 
         DB::transaction(function () {
-            $number = 'TR-' . now()->format('YmdHis');
+            $number = 'TR-' . now()->format('Ymd').random_int(10000, 99999);
             $transfer = Transfer::create([
                 'from_storage_id' => $this->fromStorage,
                 'to_storage_id'   => $this->toStorage,
                 'number'          => $number,
+                'status'          => $this->status,
+                'note'          => $this->note,
                 'user_id'         => auth()->id(),
             ]);
 
@@ -99,6 +104,7 @@ class TransferForm extends Component
                     [
                         'category'         => $fromTool->category,
                         'status'           => $fromTool->status,
+                        'note'           => $fromTool->note,
                         'model'            => $fromTool->model,
                         'Weight'           => $fromTool->Weight,
                         'Receiver'         => $fromTool->Receiver,
@@ -126,7 +132,7 @@ class TransferForm extends Component
                     'qty'                => $item['qty'],
                     'damaged_qty'        => 0,
                     'lost_qty'           => 0,
-                    'note'               => null,
+                    'note'               => $this->note,
                 ]);
             }
 

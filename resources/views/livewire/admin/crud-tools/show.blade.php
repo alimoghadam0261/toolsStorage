@@ -29,8 +29,12 @@
                             <div class="box-show-detail">
                                 <span><strong> شماره سریال:</strong></span><br><span
                                     dir="ltr">{{$tool->serialNumber}}</span>
-                            </div>
+                            </div >
                             <div class="box-show-detail">
+                                <span><strong> شماره سریال شرکتی:</strong></span><br><span
+                                    dir="ltr">{{$tool->companynumber != null ? $tool->companynumber : "ندارد"}}</span>
+                            </div >
+                            <div class="box-show-detail" style = "{{$tool->details->count < 10 ? 'animation:2s alarm linear infinite' : ''}}">
                                 <span><strong>تعداد:</strong></span><br><span>{{$tool->details->count}}</span>
                             </div>
                             <div class="box-show-detail">

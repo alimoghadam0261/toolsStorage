@@ -18,7 +18,7 @@
 
                 </div>
                 @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert" dir="rtl">
                         {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="بستن"></button>
                     </div>
@@ -47,7 +47,7 @@
                                         <th>#</th>
                                         <th>نام</th>
                                         <th>لوکیشن</th>
-                                        <th>نام مسئول</th>
+                                        <th>مدیر پروژه</th>
                                         <th>توضیحات</th>
                                         <th>عملیات</th>
                                     </tr>

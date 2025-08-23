@@ -1,6 +1,6 @@
 @import 'bootstrap/dist/css/bootstrap.rtl.min.css';
 @import '@fortawesome/fontawesome-free/css/all.min.css';
-
+/*import 'bootstrap/dist/css/bootstrap.min.css';*/
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -16,7 +16,10 @@
 body.dark-mode {
     background-color: #2b2d30;
     color: #e0e0e0;
+/*color: #78d3ad;*/
+
 }
+
 
 body.dark-mode a {
     color: #bfdddb; /* رنگ لینک‌ها در دارک مود */
@@ -104,7 +107,7 @@ strong {
     font-style: normal;
 }
 
-.col-md-10,.storage-de {
+.col-md-10, .storage-de {
     height: 100%;
     transform: translateX(-1em);
 }
@@ -135,7 +138,6 @@ body {
 /*    font-size:.8em;*/
 /*    font-weight: bold;*/
 /*}*/
-
 
 
 /*==================home page login============*/
@@ -282,9 +284,11 @@ body {
     padding: 0;
     margin: 0;
 }
+
 .sidebar-menu li {
     position: relative;
 }
+
 .sidebar-menu a {
     display: block;
     padding: 10px;
@@ -292,11 +296,12 @@ body {
     text-decoration: none;
     border-radius: 6px;
     transition: background 0.6s;
-    font-size:.8em;
+    font-size: .8em;
 
 }
+
 .sidebar-menu a:hover {
-    background: rgba(10,199,253,0.2);
+    background: rgba(10, 199, 253, 0.2);
 
 }
 
@@ -304,7 +309,7 @@ body {
 .submenu {
     max-height: 0;
     overflow: hidden;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 6px;
     margin: 5px 0 0 0;
     padding: 0;
@@ -313,12 +318,14 @@ body {
     opacity: 0;
     transform: translateX(-2em);
 }
+
 .submenu li a {
     padding: 8px 12px;
     font-size: 0.9rem;
     color: #ddd;
     transition: .5s all;
 }
+
 .submenu li a:hover {
     background: rgba(25, 187, 223, 0.1);
     color: #2b2828;
@@ -330,11 +337,6 @@ body {
     max-height: 500px; /* به اندازه‌ای زیاد که همه آیتم‌ها جا بشن */
     opacity: 1;
 }
-
-
-
-
-
 
 
 .sidebar-component {
@@ -349,9 +351,6 @@ body {
     position: fixed;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
-
-
-
 
 
 .info-user1, .info-user2 {
@@ -539,9 +538,9 @@ thead th, tbody tr {
 .box-show-detail {
     border: 1px solid gray;
     border-radius: 5px;
-    width: 10em;
+    width: 12em;
     height: auto;
-    padding: 1em;
+    padding: .5em;
     margin: .5em;
     background: #e2eaec;
     text-align: center;
@@ -551,6 +550,17 @@ thead th, tbody tr {
 .img-single-tools {
     box-shadow: rgb(9, 76, 40) 0px 20px 30px -10px;
     width: 200px;
+}
+
+@keyframes alarm {
+    from {
+        opacity: 0
+    }
+
+to {
+    opacity: 1
+}
+
 }
 
 /*=================================================================*/

@@ -28,6 +28,10 @@
                                 <input readonly type="text" class="form-control" wire:model="serialNumber">
                             </div>
                             <div class="col-md-3 mb-2">
+                                <label>شماره سریال شرکتی</label>
+                                <input  type="text" class="form-control" wire:model="companynumber">
+                            </div>
+                            <div class="col-md-3 mb-2">
                                 <label>تحویل گیرنده</label>
                                 <input required type="text"  class="form-control" wire:model="Receiver">
                             </div>

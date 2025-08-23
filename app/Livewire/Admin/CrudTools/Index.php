@@ -10,7 +10,7 @@ class Index extends Component
 
     public $toolId;
     public $name, $serialNumber, $count, $model, $Weight, $TypeOfConsumption,
-        $size, $price, $StorageLocation, $color, $status,
+        $size, $price, $StorageLocation, $color, $status,$companynumber,
         $dateOfSale, $dateOfexp, $category, $content,$Receiver;
     public $storages = [];
 
@@ -19,6 +19,7 @@ class Index extends Component
         $tool = ToolsInformation::with('details')->findOrFail($id);
         $this->toolId = $tool->id;
         $this->name = $tool->name;
+        $this->companynumber = $tool->companynumber;
         $this->serialNumber = $tool->serialNumber;
         $this->count = $tool->details->count;
         $this->status = $tool->details->status;
@@ -53,6 +54,7 @@ class Index extends Component
         $info->details()->update([
             'category' => $this->category,
             'count' => $this->count,
+            'companynumber' => $this->companynumber,
             'status' => $this->status,
             'model' => $this->model,
             'Weight' => $this->Weight,

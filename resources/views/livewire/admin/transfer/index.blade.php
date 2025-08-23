@@ -25,7 +25,7 @@
                 @endif
                 <br>
                 <div class="table-transfer-page">
-                    <table class="table table-bordered table-hover text-center" dir="rtl">
+                    <table class="table table-bordered table-hover text-center table-striped" dir="rtl">
                         <thead class="table-light">
                         <tr>
                             <th>#</th>
@@ -34,36 +34,52 @@
                             <th>مقصد</th>
                             <th>نام مسئول</th>
                             <th>وضعیت</th>
-                            <th>توضیحات</th>
+{{--                            <th>توضیحات</th>--}}
+                            <th>تاریخ</th>
                             <th>عملیات</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @forelse($transfers as $index=>$transfer)
-                            <tr class="border-b">
+                        @foreach($transfers as $index=>$transfer)
+
+                            <tr class="border-b" style="cursor:pointer;" wire:click="test({{$transfer->id}})">
+
                                 <td class="px-2 py-1">{{ $index+1 }}</td>
                                 <td class="px-2 py-1">{{ $transfer->number }}</td>
                                 <td class="px-2 py-1">{{ $transfer->fromStorage->name ?? '-' }}</td>
                                 <td class="px-2 py-1">{{ $transfer->toStorage->name ?? '-' }}</td>
                                 <td class="px-2 py-1">{{ $transfer->user->name ?? '-' }}</td>
-                                <td class="px-2 py-1">{{ $transfer->status }}</td>
+                                <td class="px-2 py-1"
+                                style="{{$transfer->status == "sent" ? 'background:#f4f474;':'background: #5ac85a'}}"
+                                >{{ $transfer->status == "sent" ? "ارسال" : "برگشت" }}</td>
+{{--                                <td class="px-2 py-1">--}}
+{{--                                    <ul class="list-disc ml-4">--}}
+{{--                                        @foreach($transfer->items as $item)--}}
+{{--                                            <li>--}}
+{{--                                                {{ $item->toolDetail->information->name ?? '---' }}--}}
+{{--                                                ({{ $item->qty }})--}}
+{{--                                            </li>--}}
+{{--                                        @endforeach--}}
+{{--                                    </ul>--}}
+{{--                                </td>--}}
+
+                                <td class="px-2 py-1">{{ jDate($transfer->created_at)->format('Y/m/d')}}</td>
                                 <td class="px-2 py-1">
-                                    <ul class="list-disc ml-4">
-                                        @foreach($transfer->items as $item)
-                                            <li>
-                                                {{ $item->toolDetail->information->name ?? '---' }}
-                                                ({{ $item->qty }})
-                                            </li>
-                                        @endforeach
-                                    </ul>
+                                    <a href="{{route('admin.tools.edit',$transfer->id)}}">
+                                        <button class="btn btn-sm btn-outline-warning">ویرایش</button>
+                                    </a>
+
+
+
+                                    <button wire:click="delete({{ $transfer->id }})"
+                                            class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('آیا مطمئن هستید؟')">حذف
+                                    </button>
+
                                 </td>
-                                <td class="px-2 py-1">{{ $transfer->created_at->format('Y-m-d H:i') }}</td>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="text-center py-4">هیچ انتقالی ثبت نشده است.</td>
-                            </tr>
-                        @endforelse
+
+                        @endforeach
                         </tbody>
                     </table>
                 </div>

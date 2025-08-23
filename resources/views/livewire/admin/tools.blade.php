@@ -81,6 +81,18 @@
                                 <tbody>
                                 @foreach($tools as $index => $tool)
 
+                                    @php
+                                        $toolCount = $tool->details->count ?? 0; // اگر details تهی بود میشه 0
+                                        $bgColor = '';
+                                        if($toolCount < 10) {
+                                            $bgColor = 'background:red;
+                                              animation: 2s alarm linear infinite;';
+                                        } elseif($toolCount < 20) {
+                                            $bgColor = 'background:#f4f474;';
+                                        }
+                                    @endphp
+
+
                                     <tr style="cursor:pointer;" wire:click="goToShow({{ $tool->id }})">
                                         <td>{{ $index+1 }}</td>
                                         <td>
@@ -97,7 +109,7 @@
                                         </td>
 
                                         <td>{{ $tool->serialNumber }}</td>
-                                        <td>{{ $tool->details->count ?? '-' }}</td>
+                                        <td style="{{ $bgColor }}">{{ $tool->details->count ?? '-' }}</td>
                                         <td>{{ $tool->details->model ?? '-' }}</td>
                                         <td>{{ $tool->details->	Receiver ?? '-' }}</td>
                                         <td>{{ $tool->details->price ?? '-' }}</td>
@@ -124,6 +136,7 @@
                                             </button>
                                         </td>
                                     </tr>
+
 
                                 @endforeach
                                 </tbody>
