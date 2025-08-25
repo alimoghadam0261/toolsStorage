@@ -122,19 +122,21 @@
                                         </td>
 
                                         <td class="text-center">
-                                            <a href="{{route('admin.tools.edit',$tool->id)}}">
+                                            <a href="{{route('admin.tools.edit',$tool->id)}}" onclick="event.stopPropagation()">
                                                 <button class="btn btn-sm btn-outline-warning">ویرایش</button>
                                             </a>
 
-                                            <a href="{{ route('admin.result.tools', $tool->id) }}">
+                                            <a href="{{ route('admin.result.tools', $tool->id) }}" onclick="event.stopPropagation()">
                                                 <button class="btn btn-sm btn-info">گزارش</button>
                                             </a>
 
-                                            <button wire:click="delete({{ $tool->id }})"
+                                            <button wire:click.stop="delete({{ $tool->id }})"
                                                     class="btn btn-sm btn-outline-danger"
-                                                    onclick="return confirm('آیا مطمئن هستید؟')">حذف
+                                                    onclick="event.stopPropagation(); return confirm('آیا مطمئن هستید؟')">
+                                                حذف
                                             </button>
                                         </td>
+
                                     </tr>
 
 

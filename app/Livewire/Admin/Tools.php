@@ -68,6 +68,7 @@ class Tools extends Component
         $tool = ToolsInformation::findOrFail($id);
         $tool->delete();
         $this->loadTools();
+//        return redirect()->route('admin.tools');
     }
 
     // واکنش به تغییر جستجو

@@ -17,7 +17,7 @@
                             </div>
                             <div class="col-md-3 mb-2">
                                 <label>دسته بندی:</label>
-                                <select required class="form-select" name="category" wire:model.live="category" id="">
+                                <select  class="form-select" name="category" wire:model.live="category" id="">
                                     <option value="" selected>انتخاب کنید</option>
                                     <option value="tools" >مصرفی</option>
                                     <option value="jam" >سرمایه ای</option>
