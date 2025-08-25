@@ -48,18 +48,17 @@
                                         <th>نام</th>
                                         <th>لوکیشن</th>
                                         <th>مدیر پروژه</th>
-                                        <th>توضیحات</th>
                                         <th>عملیات</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($storages as $index =>$item)
-                                        <tr>
+                                        <tr style="cursor:pointer;" wire:click="goToShow({{ $item->id }})">
                                             <td>{{$index +1}}</td>
                                             <td>{{$item->name}}</td>
                                             <td>{{$item->location}}</td>
                                             <td>{{$item->manager}}</td>
-                                            <td>{{$item->content}}</td>
+
                                             <td>
                                                 <i
                                                     wire:click="delete({{ $item->id }})"

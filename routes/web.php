@@ -24,6 +24,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/storages', App\Livewire\Admin\Storages::class)->name('admin.storages');
     Route::get('/storages/create', App\Livewire\Admin\CrudStorage\Create::class)->name('admin.storages.create');
     Route::get('/storages/edit', App\Livewire\Admin\CrudStorage\Edit::class)->name('admin.storages.edit');
+    Route::get('/storages/show/{id}', App\Livewire\Admin\CrudStorage\Show::class)->name('admin.storages.show');
 
     Route::get('/tools', App\Livewire\Admin\Tools::class)->name('admin.tools');
     Route::get('/tools/create', App\Livewire\Admin\CrudTools\Create::class)->name('admin.tools.create');

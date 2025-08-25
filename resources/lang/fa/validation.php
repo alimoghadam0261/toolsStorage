@@ -1,0 +1,46 @@
+<?php
+return [
+    'accepted' => 'فیلد :attribute باید پذیرفته شده باشد.',
+    'active_url' => 'فیلد :attribute یک URL معتبر نیست.',
+    'after' => 'فیلد :attribute باید تاریخی بعد از :date باشد.',
+    'alpha' => 'فیلد :attribute فقط حروف را می‌پذیرد.',
+    'required' => 'فیلد :attribute الزامی است.',
+    'string' => 'فیلد :attribute باید متن باشد.',
+    'max' => [
+        'string' => 'فیلد :attribute نباید بیشتر از :max کاراکتر باشد.',
+        'file' => 'حجم فایل :attribute نباید بیش از :max کیلوبایت باشد.',
+    ],
+    'min' => [
+        'numeric' => 'فیلد :attribute باید حداقل :min باشد.',
+        'string' => 'فیلد :attribute باید حداقل :min کاراکتر باشد.',
+    ],
+    'numeric' => 'فیلد :attribute باید عددی باشد.',
+    'date' => 'فیلد :attribute باید یک تاریخ معتبر باشد.',
+    'image' => 'فیلد :attribute باید تصویر باشد.',
+    'mimes' => 'فایل :attribute باید از نوع :values باشد.',
+    'exists' => 'مقدار انتخاب شده برای :attribute معتبر نیست.',
+    'unique' => 'مقدار :attribute قبلا ثبت شده است.',
+    // ... بقیه پیام‌ها برحسب نیاز
+
+    'attributes' => [
+        'name' => 'نام',
+        'serialNumber' => 'شماره سریال',
+        'companynumber' => 'شماره سریال شرکتی',
+        'category' => 'دسته‌بندی',
+        'customPrefix' => 'پیشوند اختصاصی',
+        'Receiver' => 'تحویل‌گیرنده',
+        'count' => 'تعداد',
+        'model' => 'مدل',
+        'Weight' => 'وزن',
+        'TypeOfConsumption' => 'نوع مصرف',
+        'size' => 'اندازه',
+        'price' => 'قیمت',
+        'storage_id' => 'محل نگهداری',
+        'color' => 'رنگ',
+        'dateOfSale' => 'تاریخ تولید',
+        'dateOfexp' => 'تاریخ انقضا',
+        'content' => 'توضیحات',
+        'attach' => 'فایل پیوست',
+        'status' => 'وضعیت',
+    ],
+];

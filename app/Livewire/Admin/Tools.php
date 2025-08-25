@@ -1,65 +1,44 @@
 <?php
 
-
 namespace App\Livewire\Admin;
 
 use App\Models\ToolsInformation;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Tools extends Component
 {
-    public $tools;
-    public $sortBy = 'id'; // پیش‌فرض مرتب‌سازی
-    public $sortDirection = 'desc'; // پیش‌فرض نزولی
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
 
-    public $searchTerm = ''; // اضافه کردن متغیر برای جستجو
 
-    public function mount()
+    public $sortBy = 'id'; // ستون پیش‌فرض برای مرتب‌سازی
+    public $sortDirection = 'desc'; // جهت پیش‌فرض
+    public $searchTerm = ''; // برای جستجو
+
+    protected $updatesQueryString = ['searchTerm', 'sortBy', 'sortDirection'];
+
+    // وقتی مرتب‌سازی تغییر کرد، صفحه به 1 برگردد
+    public function updatedSortBy()
     {
-        $this->loadTools();
+        $this->resetPage();
     }
 
-    public function loadTools()
+    public function updatedSearchTerm()
     {
-        $query = ToolsInformation::with('details');
-
-        // اعمال فیلتر جستجو در نام یا شماره سریال
-        if ($this->searchTerm) {
-            $query->where('name', 'like', '%' . $this->searchTerm . '%')
-                ->orWhere('serialNumber', 'like', '%' . $this->searchTerm . '%');
-        }
-
-        // اعمال مرتب‌سازی
-        if ($this->sortBy === 'price') {
-            $query->select('toolsinformations.*') // ستون‌های جدول اصلی
-            ->join('toolsdetailes', 'toolsinformations.id', '=', 'toolsdetailes.tools_information_id')
-                ->orderByRaw('CAST(toolsdetailes.price AS UNSIGNED) ' . 'desc');
-
-        }
-        elseif ($this->sortBy === 'count') {
-            $query->join('toolsdetailes', 'toolsinformations.id', '=', 'toolsdetailes.tools_information_id')
-                ->orderBy('toolsdetailes.count','desc')
-                ->select('toolsinformations.*');
-        }
-
-        elseif ($this->sortBy === 'date') {
-            $query->orderBy('created_at', 'desc');
-        }
-        else {
-            $query->orderBy('id', $this->sortDirection);
-        }
-
-        // بارگذاری داده‌ها
-        $this->tools = $query->take(2222)->get();
-
-
+        $this->resetPage();
     }
 
     // تغییر جهت مرتب‌سازی
-    public function updatedSortBy($value)
+    public function sortBy($field)
     {
-        $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-        $this->loadTools();
+        if ($this->sortBy === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortBy = $field;
+            $this->sortDirection = 'asc';
+        }
+        $this->resetPage();
     }
 
     // حذف ابزار
@@ -67,24 +46,47 @@ class Tools extends Component
     {
         $tool = ToolsInformation::findOrFail($id);
         $tool->delete();
-        $this->loadTools();
-//        return redirect()->route('admin.tools');
+        session()->flash('success', 'ابزار با موفقیت حذف شد');
     }
 
-    // واکنش به تغییر جستجو
-    public function updatedSearchTerm()
-    {
-        $this->loadTools();
-    }
-
+    // مسیر نمایش جزئیات ابزار
     public function goToShow($id)
     {
         return redirect()->route('admin.tools.show', $id);
     }
 
+    // query اصلی برای paginate
+    public function loadToolsQuery()
+    {
+        $query = ToolsInformation::with('details');
+
+        // جستجو
+        if ($this->searchTerm) {
+            $query->where('name', 'like', '%' . $this->searchTerm . '%')
+                ->orWhere('serialNumber', 'like', '%' . $this->searchTerm . '%');
+        }
+
+        // مرتب‌سازی
+        if ($this->sortBy === 'price') {
+            $query->select('toolsinformations.*')
+                ->join('toolsdetailes', 'toolsinformations.id', '=', 'toolsdetailes.tools_information_id')
+                ->orderByRaw('CAST(toolsdetailes.price AS UNSIGNED) ' . $this->sortDirection);
+        } elseif ($this->sortBy === 'count') {
+            $query->select('toolsinformations.*')
+                ->join('toolsdetailes', 'toolsinformations.id', '=', 'toolsdetailes.tools_information_id')
+                ->orderBy('toolsdetailes.count', $this->sortDirection);
+        } else {
+            $query->orderBy($this->sortBy, $this->sortDirection);
+        }
+
+        return $query;
+    }
+
     public function render()
     {
-        $count = $this->tools->count();
-        return view('livewire.admin.tools', compact('count')) ->with('tools', $this->tools);
+        $tools = $this->loadToolsQuery()->paginate(2);
+        $count = $tools->total();
+
+        return view('livewire.admin.tools', compact('tools', 'count'));
     }
 }

@@ -8,6 +8,13 @@ use Livewire\Component;
 class Storages extends Component
 {
 
+    public function goToShow($id)
+    {
+        return redirect()->route('admin.storages.show', $id);
+    }
+
+
+
     public function delete($id)
     {
         $storage = Storage::findOrFail($id);

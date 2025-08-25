@@ -15,4 +15,10 @@ class Storage extends Model
     ];
 
 
+    public function toolsDetails()
+    {
+        return $this->hasMany(ToolsDetail::class, 'storage_id');
+    }
+
+
 }

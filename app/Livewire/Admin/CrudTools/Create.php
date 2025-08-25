@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\CrudTools;
 
 use App\Models\ToolsInformation;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use App\Models\Storage;
 use Livewire\WithFileUploads;
@@ -70,44 +71,43 @@ class Create extends Component
 //
 //        return $serial;
 //    }
+
     private function generateUniqueSerial($category)
     {
-        if ($category === 'IPR-') {
+        if (strtolower($category) === 'abzar-') {
+            $prefix = 'abzar-';
+        } elseif (strtoupper($category) === 'IPR' || $category === 'IPR-') {
             $prefix = 'IPR-';
-        }
-        else if ($category === 'abzar') {
-            $prefix = $this->customPrefix ? $this->customPrefix . '-' : 'abzar-';
-            $lastSerial = ToolsInformation::where('serialNumber', 'like', $prefix . '%')
-                ->orderBy('serialNumber', 'desc')
-                ->value('serialNumber');
-
-
-            $lastNumber = (int) str_replace($prefix, '', $lastSerial);
-
-            $newNumber = $lastNumber + 1;
-        }
-
-
-
-        else {
-            // اگر کاربر چیزی انتخاب نکرده بود، پیش‌فرض 200
+        } else {
+            // فقط برای دسته‌های دیگه پیشوند اختصاصی بگیره
             $prefix = $this->customPrefix ? $this->customPrefix . '-' : '200-';
         }
 
-        // پیدا کردن آخرین سریال ذخیره شده در دیتابیس
-        $lastSerial = ToolsInformation::where('serialNumber', 'like', $prefix . '%')
-            ->orderBy('serialNumber', 'desc')
-            ->value('serialNumber');
+        // گرفتن بیشترین شماره موجود با این prefix، شامل soft deleted ها
+        $lastNumber = ToolsInformation::withTrashed()
+            ->where('serialNumber', 'like', $prefix . '%')
+            ->select(DB::raw("MAX(CAST(SUBSTRING(serialNumber, ".(strlen($prefix)+1).") AS UNSIGNED)) as max_number"))
+            ->value('max_number');
 
-        if ($lastSerial) {
-            $lastNumber = (int) str_replace($prefix, '', $lastSerial);
-            $newNumber = $lastNumber + 1;
-        } else {
-            $newNumber = 1;
+        $nextNumber = $lastNumber ? $lastNumber + 1 : 1;
+
+        // ساخت شماره سریال
+        $serial = $prefix . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+
+        // اطمینان از یکتا بودن (اضافی ولی ایمن)
+        while (ToolsInformation::withTrashed()->where('serialNumber', $serial)->exists()) {
+            $nextNumber++;
+            $serial = $prefix . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
         }
 
-        return $prefix . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
+        return $serial;
     }
+
+
+
+
+
+
     public function updatedCustomPrefix($value)
     {
         if (!empty($this->category)) {
