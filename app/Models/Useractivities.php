@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Useractivities extends Model
+class UserActivity extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
         'action',
@@ -13,5 +16,4 @@ class Useractivities extends Model
         'ip_address',
         'user_agent',
     ];
-
 }
