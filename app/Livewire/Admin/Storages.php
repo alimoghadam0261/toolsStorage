@@ -8,10 +8,6 @@ use Livewire\Component;
 class Storages extends Component
 {
 
-    public function goToShow($id)
-    {
-        return redirect()->route('admin.storages.show', $id);
-    }
 
 
 
@@ -20,8 +16,15 @@ class Storages extends Component
         $storage = Storage::findOrFail($id);
         $storage->delete(); // Soft delete
         session()->flash('success', 'سایت با موفقیت حذف شد.');
+        return redirect()->to('/admin/storages');
+
     }
 
+
+    public function goToShow($id)
+    {
+        return redirect()->route('admin.storages.show', $id);
+    }
 
     public function render()
     {

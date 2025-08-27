@@ -24,10 +24,10 @@
                     </div>
                 @endif
                 <br>
-                <div class="search-storage-admin" dir="rtl">
-                    <input type="text" placeholder="جستجو : نام ابزار یا شماره ابزار را وارد نمایید "
-                           class="form-control">
-                </div>
+{{--                <div class="search-storage-admin" dir="rtl">--}}
+{{--                    <input type="text" placeholder="جستجو : نام ابزار یا شماره ابزار را وارد نمایید "--}}
+{{--                           class="form-control">--}}
+{{--                </div>--}}
                 <br>
 
 
@@ -52,7 +52,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($storages as $index =>$item)
+                                    @foreach($storages as $index => $item)
                                         <tr style="cursor:pointer;" wire:click="goToShow({{ $item->id }})">
                                             <td>{{$index +1}}</td>
                                             <td>{{$item->name}}</td>
@@ -61,13 +61,15 @@
 
                                             <td>
                                                 <i
-                                                    wire:click="delete({{ $item->id }})"
-                                                    onclick="return confirm('آیا از حذف این سایت مطمئن هستید؟')"
+                                                    wire:click.stop="delete({{ $item->id }})"
+                                                    onclick="event.stopPropagation(); return confirm('آیا مطمئن هستید؟')"
                                                     class="fa fa-trash"
                                                     style="cursor:pointer"
                                                 ></i>
                                                 <i class="fa fa-edit"></i>
                                             </td>
+
+
 
                                         </tr>
                                     @endforeach

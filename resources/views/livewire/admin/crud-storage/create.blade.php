@@ -1,12 +1,10 @@
-<div dir="rtl" class="dashboard-admin">
+<div class="dashboard-admin">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-2">
-                @livewire('component.admin.sidebar')
-            </div>
-            <div class="col-md-10">
+            <div class="col-md-10" dir="rtl">
                 @livewire('component.admin.topmenu')
                 <hr>
+                <br>
                 <h5>پذیرش انبار و سایت جدید</h5>
 
                 <br>
@@ -38,8 +36,19 @@
                     <br>
                     <button class="btn btn-success">ثبت سایت جدید</button>
                 </form>
+
+
+            </div>
+
+            <div class="col-md-2">
+                @livewire('component.admin.sidebar')
             </div>
         </div>
     </div>
 </div>
+
+
+
+
+
 

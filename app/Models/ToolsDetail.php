@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+//use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ToolsDetail extends Model
 {
-    use SoftDeletes;
+//    use SoftDeletes;
 
     protected $table = 'toolsdetailes';
 
@@ -39,4 +39,12 @@ class ToolsDetail extends Model
     {
         return $this->qty_total - ($this->qty_in_use + $this->qty_damaged + $this->qty_lost);
     }
+
+
+
+    public function getPriceAttribute($value)
+    {
+        return (int) $value; // یا number_format($value, 0)
+    }
+
 }

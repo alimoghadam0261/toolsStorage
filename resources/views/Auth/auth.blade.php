@@ -55,7 +55,9 @@
                         <br>
 
                         @if($errors->has('credentials'))
-                            <p class="text-red-600 mb-4">{{ $errors->first('credentials') }}</p>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <p class="text-center">{{ $errors->first('credentials') }}</p>
+                            </div>
                         @endif
 
                         <form method="POST" action="{{ route('login') }}">

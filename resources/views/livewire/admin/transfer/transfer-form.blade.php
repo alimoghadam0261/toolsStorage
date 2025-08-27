@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="row">
         <div class="col-md-10" dir="rtl">
             <div class="card shadow-sm">

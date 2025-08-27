@@ -38,7 +38,7 @@
                                 <span><strong>تعداد:</strong></span><br><span>{{$tool->details->count}}</span>
                             </div>
                             <div class="box-show-detail">
-                                <span><strong>قیمت:</strong></span><br><span>{{$tool->details->price}}</span>
+                                <span><strong>قیمت:</strong></span><br><span>{{($tool->details->price)}}</span>
                             </div>
                             <div class="box-show-detail">
                                 <span><strong>رنگ:</strong></span><br><span>{{$tool->details->color}}</span>

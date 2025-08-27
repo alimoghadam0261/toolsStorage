@@ -7,17 +7,15 @@
                 <div class="widgets-admin">
                     <div class="box-widget-admin" style="background: #ddf0f8">
                         <a href="{{route('admin.tools.create')}}">
-                        <br>
+                            <br>
 
                             <h5 style="transform: translateY(-.5em)">
                                 ثبت ابزار جدید
                             </h5>
 
-                    </a></div>
+                        </a></div>
 
                 </div>
-
-
 
 
                 @if(session('success'))
@@ -41,21 +39,60 @@
                     <div class="col-md-12">
                         <div class="box-storage-admin">
                             <div class="row test-storage-info">
-                                <div class="col-md-6"><span>محموع ابزار آلات در انبار: {{ $count }}
-  </span>
+                                <div class="col-md-2" style="margin-top:1.5em;" >
 
-                                       </div>
+                                    <span
+style="font-weight: bold"
+                                    >مجموع ابزار آلات : {{ $count }}</span>
 
-                                <div class="col-md-6">
+                                </div>
 
+                                <div class="col-md-8 text-center">
 
-                                            <label for="">فیلتر بر اساس</label>
-
-                                            <select wire:model.live="sortBy" class="form-select-sm" name="" id="">
-                                                <option value="date">تاریخ</option>
-                                                <option value="count">تعداد</option>
-                                                <option value="price">قیمت</option>
+                                    <div class="row mb-3" dir="rtl">
+                                        <div class="col-md-3">
+                                            <label>از تاریخ</label>
+                                            <input type="date" class="form-control-sm" wire:model.defer="date_from">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>تا تاریخ</label>
+                                            <input type="date" class="form-control-sm" wire:model.defer="date_to">
+                                        </div>
+                                        <div class="col-md-3"   style="transform: translate(3em ,.2em)">
+                                            <label>نوع خروجی</label><br>
+                                            <select class="form-select-sm" wire:model="exportFormat">
+                                                <option value="pdf">PDF</option>
+                                                <option value="excel">Excel</option>
                                             </select>
+                                        </div>
+                                        <div class="col-md-3 d-flex align-items-start " >
+                                            <button
+                                                style="transform: translate(4em ,1.7em)"
+                                                wire:click="export" class="btn btn-info btn-sm">دانلود</button>
+                                        </div>
+                                    </div>
+
+                                    <script>
+                                        window.addEventListener('open-export-url', function(e){
+                                            const url = e.detail.url;
+                                            // باز کردن در تب جدید
+                                            window.open(url, '_blank');
+                                        });
+                                    </script>
+
+
+                                </div>
+
+                                <div class="col-md-2">
+
+
+                                    <label for="">فیلتر بر اساس</label><br>
+
+                                    <select wire:model.live="sortBy" class="form-select-sm" name="" id="">
+                                        <option value="date">تاریخ</option>
+                                        <option value="count">تعداد</option>
+                                        <option value="price">قیمت</option>
+                                    </select>
 
 
                                 </div>
@@ -63,7 +100,7 @@
 
                             </div>
                             <br>
-                            <table class="table table-bordered table-hover text-center" style="justify-content: center" >
+                            <table class="table table-bordered table-hover text-center" style="justify-content: center">
                                 <thead class="table-light">
                                 <tr>
                                     <th>#</th>
@@ -97,9 +134,11 @@
                                         <td>{{ $index+1 }}</td>
                                         <td>
                                             @if($tool->details && $tool->details->attach)
-                                                <img src="{{ asset('storage/tools/' . $tool->details->attach) }}" width="50" alt="{{ $tool->name }}" />
+                                                <img src="{{ asset('storage/tools/' . $tool->details->attach) }}"
+                                                     width="50" alt="{{ $tool->name }}"/>
                                             @else
-                                                <img src="{{ asset('img/default.png') }}" width="50" alt="{{ $tool->name }}" />
+                                                <img src="{{ asset('img/default.png') }}" width="50"
+                                                     alt="{{ $tool->name }}"/>
                                             @endif
                                         </td>
 
@@ -123,7 +162,8 @@
                                             <!-- دکمه دانلود (اختیاری) -->
                                             <div style="margin-top:5px; text-align:center;">
                                                 <a href="#" class="btn btn-sm btn-outline-secondary download-qr"
-                                                   data-target="#qrcode-{{ $tool->id }}" onclick="event.stopPropagation(); return false;">
+                                                   data-target="#qrcode-{{ $tool->id }}"
+                                                   onclick="event.stopPropagation(); return false;">
                                                     دانلود
                                                 </a>
                                             </div>
@@ -139,11 +179,13 @@
                                         </td>
 
                                         <td class="text-center">
-                                            <a href="{{route('admin.tools.edit',$tool->id)}}" onclick="event.stopPropagation()">
+                                            <a href="{{route('admin.tools.edit',$tool->id)}}"
+                                               onclick="event.stopPropagation()">
                                                 <button class="btn btn-sm btn-outline-warning">ویرایش</button>
                                             </a>
 
-                                            <a href="{{ route('admin.result.tools', $tool->id) }}" onclick="event.stopPropagation()">
+                                            <a href="{{ route('admin.result.tools', $tool->id) }}"
+                                               onclick="event.stopPropagation()">
                                                 <button class="btn btn-sm btn-info">گزارش</button>
                                             </a>
 
@@ -156,13 +198,12 @@
 
                                     </tr>
 
-
                                 @endforeach
                                 </tbody>
                             </table>
-                        <div class="d-flex justify-content-center mt-4 pagination pagination-sm">
-                            {{ $tools->links() }}
-                        </div>
+                            <div class="d-flex justify-content-center mt-4 pagination pagination-sm">
+                                {{ $tools->links() }}
+                            </div>
                         </div>
 
                     </div>
@@ -351,27 +392,39 @@
                     });
                     // هم‌چنین اگر event load livewire فعال شد
                     document.addEventListener('livewire:load', () => {
-                        setTimeout(() => { generateAll(); initQRDownloadButtons(); }, 60);
+                        setTimeout(() => {
+                            generateAll();
+                            initQRDownloadButtons();
+                        }, 60);
                     });
                 } else {
                     // اگر Livewire وجود ندارد، فقط در load و DOMContentLoaded بساز
                     document.addEventListener('DOMContentLoaded', () => {
-                        setTimeout(() => { generateAll(); initQRDownloadButtons(); }, 60);
+                        setTimeout(() => {
+                            generateAll();
+                            initQRDownloadButtons();
+                        }, 60);
                     });
                     window.addEventListener('load', () => {
-                        setTimeout(() => { generateAll(); initQRDownloadButtons(); }, 60);
+                        setTimeout(() => {
+                            generateAll();
+                            initQRDownloadButtons();
+                        }, 60);
                     });
                 }
 
                 // استارت observer روی body
                 try {
-                    observer.observe(document.body, { childList: true, subtree: true });
+                    observer.observe(document.body, {childList: true, subtree: true});
                 } catch (e) {
                     console.warn('[QR] MutationObserver not supported', e);
                 }
 
                 // اجرای اولیه
-                setTimeout(() => { generateAll(); initQRDownloadButtons(); }, 120);
+                setTimeout(() => {
+                    generateAll();
+                    initQRDownloadButtons();
+                }, 120);
             }
 
             // اجرا
