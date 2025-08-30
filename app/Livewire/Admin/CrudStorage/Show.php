@@ -19,11 +19,15 @@ class Show extends Component
     {
         $this->storages = Storage::findOrFail($id);
 
-        $this->locations = ToolsLocation::with('tool.details')
-            ->where('location', $this->storages->name) // فقط ابزارهای همین انبار
+        $this->locations = ToolsLocation::with(['tool.details'])
+            ->where('location', $this->storages->name)
+            ->whereHas('tool', function ($q) {
+                $q->whereNull('deleted_at'); // فقط ابزارهایی که حذف نشده‌اند
+            })
             ->orderBy('moved_at', 'desc')
             ->get();
     }
+
 
 
 

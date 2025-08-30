@@ -52,11 +52,15 @@ style="font-weight: bold"
                                     <div class="row mb-3" dir="rtl">
                                         <div class="col-md-3">
                                             <label>از تاریخ</label>
-                                            <input type="date" class="form-control-sm" wire:model.defer="date_from">
+                                            <input data-jdp
+                                                   data-jdp-only-date="true" class="form-control-sm" wire:model.defer="date_from">
                                         </div>
                                         <div class="col-md-3">
                                             <label>تا تاریخ</label>
-                                            <input type="date" class="form-control-sm" wire:model.defer="date_to">
+                                            <input     data-jdp
+                                                       data-jdp-only-date="true"
+
+                                                     class="form-control-sm" wire:model.defer="date_to">
                                         </div>
                                         <div class="col-md-3"   style="transform: translate(3em ,.2em)">
                                             <label>نوع خروجی</label><br>

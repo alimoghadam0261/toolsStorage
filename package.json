@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^7.0.0",
+        "@majidh1/jalalidatepicker": "^0.9.12",
         "bootstrap": "^5.3.7",
         "bootstrap-rtl": "^3.3.4",
         "chart.js": "^4.5.0",

@@ -53,17 +53,20 @@
                         </tr>
                         </thead>
                         <tbody>
+
                         @forelse($locations as $index => $location)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $location->tool->name ?? '-' }}</td>
-                                <td>{{ $location->tool->details->count ?? '-' }}</td>
-                                <td>{{ $location->tool->details->model ?? '-' }}</td>
+                                <td>{{ $location->tool->name }}</td>
+                                <td>{{ $location->tool->details->count() }}</td>
+                                <td>
+                                    {{-- اگر details چندتاست، باید مثلا اولین مدل رو نشون بدی --}}
+                                    {{ $location->tool->details->first()->model ?? '-' }}
+                                </td>
                                 <td>{{ $location->status }}</td>
                                 <td>{{ $location->moved_at ? jdate($location->moved_at)->format('Y-m-d H:i') : '-' }}</td>
                                 <td>
                                     <a href="{{ route('admin.tools.show', $location->tools_information_id) }}" class="btn btn-sm btn-primary">نمایش</a>
-{{--                                    <a href="{{ route('admin.tools.edit', $location->tools_information_id) }}" class="btn btn-sm btn-warning">ویرایش</a>--}}
                                 </td>
                             </tr>
                         @empty
@@ -71,6 +74,7 @@
                                 <td colspan="7" class="text-center">ابزاری برای این انبار ثبت نشده</td>
                             </tr>
                         @endforelse
+
 
                         </tbody>
                     </table>
