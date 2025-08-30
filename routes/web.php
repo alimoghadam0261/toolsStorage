@@ -21,7 +21,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // =================== داشبورد و پنل ادمین ===================
-Route::middleware(['auth'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'role:admin,author'])->prefix('admin')->group(function () {
 
     // داشبورد اصلی
     Route::get('/dashboard', App\Livewire\Admin\Dashboard::class)->name('admin.dashboard');
@@ -44,7 +44,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     // پرسنل و کاربران
     Route::get('/personal', App\Livewire\Admin\Personal::class)->name('admin.personal');
-
     // عملیات روی کاربران
     Route::delete('/users/{id}', [AuthController::class, 'destroy'])->name('admin.users.destroy');
     Route::patch('/users/{id}/restore', [AuthController::class, 'restore'])->name('admin.users.restore');
