@@ -6,6 +6,29 @@
                 <hr>
                 <br>
 
+                  <div class="widgets-admin">
+                      <a class="box-widget-admin" href="{{route('admin.activities')}}">  <div >
+                        <h6>گزارشات پرسنل</h6>
+{{--                        <p>{{$countTools}}</p>--}}
+                    </div></a>
+                    <div class="box-widget-admin">
+                        <h6>مجموع جم ثبت شده </h6>
+{{--                        <p>{{$countJam}}</p>--}}
+                    </div>
+                    <div class="box-widget-admin">
+                        <h6>مجموع تعداد ابزار خارج از انبار</h6>
+                        <p>1234</p>
+                    </div>
+                    <div class="box-widget-admin">
+                        <h6>مجموع جم خارج از انبار</h6>
+                        <p>1234</p>
+                    </div>
+                </div>
+
+
+
+
+
 
             </div>
 

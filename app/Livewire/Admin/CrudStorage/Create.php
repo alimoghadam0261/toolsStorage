@@ -3,6 +3,8 @@
 namespace App\Livewire\Admin\CrudStorage;
 
 use App\Models\Storage;
+use App\Models\UserActivity;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Create extends Component
@@ -29,6 +31,18 @@ class Create extends Component
             'manager'=>$this->manager,
             'content'=>$this->content,
         ]);
+
+        // ثبت لاگ کاربری
+        UserActivity::create([
+            'user_id'    => Auth::id(),
+            'action'     => 'create',
+            'model_type' => 'Storage',
+            'model_id'   => $storages->id,
+            'description'=> "ایجاد انبار جدید: {$storages->name}",
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
+
         session()->flash('success', 'اطلاعات سایت با موفقیت ثبت شد.');
         return redirect()->route('admin.storages');
     }

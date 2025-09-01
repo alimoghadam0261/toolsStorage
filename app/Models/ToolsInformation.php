@@ -20,7 +20,10 @@ class ToolsInformation extends Model
         return $this->hasOne(ToolsDetail::class, 'tools_information_id');
     }
 
-
+//    public function UserActivity()
+//    {
+//        return $this->hasOne(UserActivity::class, 'UserActivity_id');
+//    }
 
 
     public function locations()

@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Storage;
+use App\LogsActivity; // ← مطابق مسیر فایل
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Storage;
 
 class AuthController extends Controller
 {
+    use LogsActivity;
+
     // فرم ثبت‌نام
     public function showRegisterForm()
     {
@@ -17,7 +20,7 @@ class AuthController extends Controller
         return view('auth.auth', compact('storages'));
     }
 
-    // ثبت‌نام
+    // ثبت‌نام کاربر
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -32,7 +35,10 @@ class AuthController extends Controller
         // هش کردن موبایل برای رمز عبور
         $data['mobile'] = Hash::make($data['mobile']);
 
-        User::create($data);
+        $user = User::create($data);
+
+        // ثبت لاگ ایجاد کاربر
+        $this->logActivity('create', $user, "ثبت‌نام کاربر جدید: {$user->name}");
 
         return redirect()->back()->with('success', 'کاربر جدید با موفقیت ثبت شد ✅');
     }
@@ -56,11 +62,14 @@ class AuthController extends Controller
 
         if (!$user || !Hash::check($data['mobile'], $user->mobile)) {
             return back()->withErrors([
-                'credentials' => 'همکار گرامی ، شماره پرسنلی یا رمز عبور اشتباه می‌باشد'
+                'credentials' => 'شماره پرسنلی یا رمز عبور اشتباه می‌باشد'
             ]);
         }
 
         Auth::login($user);
+
+        // ثبت لاگ ورود
+        $this->logActivity('login', $user, "کاربر وارد سیستم شد");
 
         return $this->redirectBasedOnRole($user);
     }
@@ -68,33 +77,38 @@ class AuthController extends Controller
     // هدایت بر اساس نقش
     protected function redirectBasedOnRole(User $user)
     {
-        $role = $user->role;
-
-        if ($role === 'admin' || $role === 'author') {
-            return redirect()->route('admin.dashboard');
+        switch ($user->role) {
+            case 'admin':
+            case 'author':
+                return redirect()->route('admin.dashboard');
+            default:
+                return redirect()->route('home');
         }
-
-        // پیش‌فرض کاربر عادی
-        return redirect()->route('home');
     }
 
     // خروج
     public function logout(Request $request)
     {
-        Auth::logout();
+        $user = Auth::user();
+        if ($user) {
+            $this->logActivity('logout', $user, "کاربر خارج شد");
+        }
 
-        // حذف session
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect()->route('login.form');
     }
 
-    // حذف نرم
+    // حذف نرم کاربر
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
+
+        $this->logActivity('delete', $user, "حذف نرم کاربر: {$user->name}");
+
         return redirect()->back()->with('success', 'کاربر با موفقیت حذف شد.');
     }
 
@@ -103,14 +117,20 @@ class AuthController extends Controller
     {
         $user = User::withTrashed()->findOrFail($id);
         $user->restore();
+
+        $this->logActivity('restore', $user, "بازیابی کاربر: {$user->name}");
+
         return redirect()->back()->with('success', 'کاربر با موفقیت بازیابی شد.');
     }
 
-    // حذف کامل
+    // حذف کامل کاربر
     public function forceDelete($id)
     {
         $user = User::withTrashed()->findOrFail($id);
         $user->forceDelete();
+
+        $this->logActivity('force_delete', $user, "حذف کامل کاربر: {$user->name}");
+
         return redirect()->back()->with('success', 'کاربر به طور کامل حذف شد.');
     }
 }

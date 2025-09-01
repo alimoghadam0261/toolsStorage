@@ -3,24 +3,24 @@
 namespace App\Livewire\Admin;
 
 use App\Models\ToolsInformation;
+use App\Models\UserActivity;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Morilog\Jalali\Jalalian;
+use Carbon\Carbon;
 
 class Tools extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    // existing props
     public $sortBy = 'id';
     public $sortDirection = 'desc';
     public $searchTerm = '';
-
-    // new props for export
     public $date_from;
     public $date_to;
-    public $exportFormat = 'pdf'; // مطابق blade: wire:model="exportFormat"
+    public $exportFormat = 'pdf';
 
     protected $updatesQueryString = ['searchTerm', 'sortBy', 'sortDirection'];
 
@@ -48,7 +48,21 @@ class Tools extends Component
     public function delete($id)
     {
         $tool = ToolsInformation::findOrFail($id);
+        $toolName = $tool->name;
+        $toolSerial = $tool->serialNumber;
+
         $tool->delete();
+
+        UserActivity::create([
+            'user_id'    => Auth::id(),
+            'action'     => 'delete',
+            'model_type' => 'ToolsInformation',
+            'model_id'   => $id,
+            'description'=> "ابزار حذف شد: {$toolName} ({$toolSerial})",
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
+
         session()->flash('success', 'ابزار با موفقیت حذف شد');
     }
 
@@ -61,11 +75,30 @@ class Tools extends Component
     {
         $query = ToolsInformation::with('details');
 
+        // فیلتر جستجو
         if ($this->searchTerm) {
-            $query->where('name', 'like', '%' . $this->searchTerm . '%')
-                ->orWhere('serialNumber', 'like', '%' . $this->searchTerm . '%');
+            $query->where(function ($q) {
+                $q->where('name', 'like', '%' . $this->searchTerm . '%')
+                    ->orWhere('serialNumber', 'like', '%' . $this->searchTerm . '%');
+            });
         }
 
+        // فیلتر تاریخ شمسی
+        if ($this->date_from) {
+            $from = $this->parseJalaliToCarbonOrNull($this->date_from);
+            if ($from) {
+                $query->whereDate('created_at', '>=', $from->startOfDay());
+            }
+        }
+
+        if ($this->date_to) {
+            $to = $this->parseJalaliToCarbonOrNull($this->date_to);
+            if ($to) {
+                $query->whereDate('created_at', '<=', $to->endOfDay());
+            }
+        }
+
+        // مرتب‌سازی
         if ($this->sortBy === 'price') {
             $query->select('toolsinformations.*')
                 ->join('toolsdetailes', 'toolsinformations.id', '=', 'toolsdetailes.tools_information_id')
@@ -81,38 +114,54 @@ class Tools extends Component
         return $query;
     }
 
-    /**
-     * Export action:
-     * این متد URL دانلود را می‌سازد و با یک browser event به فرانت‌اند می‌فرستد.
-     * اسکریپت شما در tools.blade این event را شنیده و url را در تب جدید باز می‌کند.
-     */
     public function export()
     {
-        // اعتبارسنجی
         $this->validate([
-            'date_from'    => 'nullable|date',
-            'date_to'      => 'nullable|date',
+            'date_from'    => 'nullable|string',
+            'date_to'      => 'nullable|string',
             'exportFormat' => 'required|in:pdf,excel',
         ]);
 
-        // پارامترها (مقادیر null حذف می‌شوند)
-        $params = array_filter([
-            'date_from' => $this->date_from ?: null,
-            'date_to'   => $this->date_to ?: null,
-            'format'    => $this->exportFormat,
-        ], function($v) { return $v !== null && $v !== ''; });
+        $dateFrom = $this->parseJalaliToCarbonOrNull($this->date_from);
+        $dateTo   = $this->parseJalaliToCarbonOrNull($this->date_to);
 
-        // توجه: مطمئن شو این روت وجود دارد:
-        // Route::get('/admin/tools/export', [ToolsExportController::class, 'export'])->name('admin.tools.export');
+        $params = array_filter([
+            'date_from' => $dateFrom ? $dateFrom->toDateString() : null,
+            'date_to'   => $dateTo ? $dateTo->toDateString() : null,
+            'format'    => $this->exportFormat,
+        ], fn($v) => $v !== null && $v !== '');
+
         $url = route('admin.tools.export', $params);
 
-        // ریدایرکت مرورگر (در تب جاری)
         return redirect()->to($url);
     }
 
+    private function faDigitsToEn(?string $value): ?string
+    {
+        if ($value === null) return null;
+        $persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹','٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+        $english = ['0','1','2','3','4','5','6','7','8','9','0','1','2','3','4','5','6','7','8','9'];
+        return str_replace($persian, $english, $value);
+    }
 
+    private function parseJalaliToCarbonOrNull(?string $jalali)
+    {
+        if (empty($jalali)) return null;
 
+        $raw = trim($jalali);
+        $raw = $this->faDigitsToEn($raw);
+        $raw = str_replace(['.', '-', ' '], '/', $raw);
 
+        try {
+            return Jalalian::fromFormat('Y/m/d', $raw)->toCarbon();
+        } catch (\Throwable $e) {
+            try {
+                return Carbon::parse($raw);
+            } catch (\Throwable $ex) {
+                return null;
+            }
+        }
+    }
 
     public function render()
     {

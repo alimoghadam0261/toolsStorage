@@ -1,12 +1,10 @@
-<div dir="rtl" class="dashboard-admin">
+<div class="dashboard-admin">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-2">
-                @livewire('component.admin.sidebar')
-            </div>
-            <div class="col-md-10">
+            <div class="col-md-10" dir="rtl">
                 @livewire('component.admin.topmenu')
                 <hr>
+                <br>
                 <h1>گزارشات</h1>
 
                 <div class="container">
@@ -48,14 +46,26 @@
 
 
             </div>
+
+
+            <div class="col-md-2">
+                @livewire('component.admin.sidebar')
+            </div>
         </div>
     </div>
 </div>
-<script
-    type="text/javascript"
-    src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+{{--<script--}}
+{{--    type="text/javascript"--}}
+{{--    src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>--}}
+
+{{--<script>--}}
+
+
+<script src="{{ asset('./js/vis-network.js') }}"></script>
+
 
 <script>
+
     document.addEventListener('livewire:initialized', () => {
         const nodes = new vis.DataSet(@json($nodes));
         const edges = new vis.DataSet(@json($edges));

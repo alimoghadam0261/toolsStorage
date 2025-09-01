@@ -11,6 +11,10 @@ class ToolsDetail extends Model
 
     protected $table = 'toolsdetailes';
 
+    protected $casts = [
+        'dateOfSale' => 'date',
+        'dateOfexp'  => 'date',
+    ];
 
     protected $fillable = [
         // فیلدهای قدیمی

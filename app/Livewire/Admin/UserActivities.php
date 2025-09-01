@@ -1,31 +1,58 @@
 <?php
 
-namespace App\Http\Livewire\Admin;
+namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\User;
 use App\Models\UserActivity;
 
 class UserActivities extends Component
 {
     use WithPagination;
 
-    public User $user;
+    protected string $paginationTheme = 'bootstrap';
+    public int $perPage = 30;
+    public string $search = ''; // 🔍 سرچ زنده
 
-    protected $paginationTheme = 'bootstrap'; // یا tailwind بسته به قالب شما
-
-    public function mount(User $user)
+    public function updatingSearch()
     {
-        $this->user = $user;
+        // وقتی سرچ تغییر کرد صفحه برگرده به اول
+        $this->resetPage();
     }
 
     public function render()
     {
-        $activities = Useractivities::where('user_id', $this->user->id)
-            ->orderByDesc('created_at')
-            ->paginate(20);
+        $activities = UserActivity::with('user')
+            ->whereNotIn('model_type', ['ToolsDetail', 'ToolsInformation'])
+            ->whereHas('user', function ($q) {
+                $q->where('name', 'like', "%{$this->search}%")
+                    ->orWhere('cardNumber', 'like', "%{$this->search}%");
+            })
+            ->latest()
+            ->paginate($this->perPage);
 
-        return view('livewire.admin.user-activities', compact('activities'));
+        $toolActivities = UserActivity::with('user')
+            ->whereIn('model_type', ['ToolsDetail', 'ToolsInformation'])
+            ->whereHas('user', function ($q) {
+                $q->where('name', 'like', "%{$this->search}%")
+                    ->orWhere('cardNumber', 'like', "%{$this->search}%");
+            })
+            ->latest()
+            ->paginate($this->perPage);
+
+        $storageActivities = UserActivity::with(['user', 'storage'])
+            ->where('model_type', 'Storage')
+            ->whereHas('user', function ($q) {
+                $q->where('name', 'like', "%{$this->search}%")
+                    ->orWhere('cardNumber', 'like', "%{$this->search}%");
+            })
+            ->latest()
+            ->paginate($this->perPage);
+
+        return view('livewire.admin.user-activities', [
+            'activities' => $activities,
+            'toolActivities' => $toolActivities,
+            'storageActivities' => $storageActivities,
+        ]);
     }
 }

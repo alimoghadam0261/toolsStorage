@@ -5,18 +5,23 @@ namespace App\Livewire\Admin\CrudTools;
 use App\Models\ToolsInformation;
 use Livewire\Component;
 use App\Models\Storage;
+use App\LogsActivity; // Trait ثبت لاگ
+
 class Index extends Component
 {
+    use LogsActivity;
 
     public $toolId;
     public $name, $serialNumber, $count, $model, $Weight, $TypeOfConsumption,
-        $size, $price, $StorageLocation, $color, $status,$companynumber,
-        $dateOfSale, $dateOfexp, $category, $content,$Receiver;
+        $size, $price, $StorageLocation, $color, $status, $companynumber,
+        $dateOfSale, $dateOfexp, $category, $content, $Receiver;
+
     public $storages = [];
 
     public function mount($id)
     {
         $tool = ToolsInformation::with('details')->findOrFail($id);
+
         $this->toolId = $tool->id;
         $this->name = $tool->name;
         $this->companynumber = $tool->companynumber;
@@ -37,20 +42,22 @@ class Index extends Component
         $this->content = $tool->details->content;
 
         $this->storages = Storage::select('id', 'name')->get();
-
     }
-
 
     public function updateTool()
     {
         $info = ToolsInformation::findOrFail($this->toolId);
+
+        // آپدیت محل و ثبت لاگ انتقال
         $this->updateLocation($this->toolId, $this->StorageLocation);
+
+        // بروزرسانی اطلاعات اصلی ابزار
         $info->update([
             'name' => $this->name,
-            'serialNumber' => $this->serialNumber
-
+            'serialNumber' => $this->serialNumber,
         ]);
-//   انبار مرکزی
+
+        // بروزرسانی جزئیات ابزار
         $info->details()->update([
             'category' => $this->category,
             'count' => $this->count,
@@ -69,10 +76,16 @@ class Index extends Component
             'content' => $this->content,
         ]);
 
+        // ثبت لاگ ویرایش ابزار
+        $this->logActivity('edit', $info, "ابزار ویرایش شد: {$info->details->model}");
+
         session()->flash('success', 'اطلاعات با موفقیت به‌روزرسانی شد.');
         return redirect()->route('admin.tools');
     }
 
+    /**
+     * آپدیت محل ابزار و ثبت در جدول locations
+     */
     public function updateLocation($toolId, $newLocation)
     {
         $tool = ToolsInformation::findOrFail($toolId);
@@ -83,22 +96,19 @@ class Index extends Component
             'Receiver' => $this->Receiver,
         ]);
 
-        // ثبت لاگ
+        // ثبت لاگ تغییر محل
         $tool->locations()->create([
             'location' => $newLocation,
             'Receiver' => $this->Receiver,
             'status' => $this->status,
-            'moved_at' => now()
+            'moved_at' => now(),
         ]);
     }
-
-
-
 
     public function render()
     {
         return view('livewire.admin.crud-tools.index', [
-            'storages' => $this->storages
+            'storages' => $this->storages,
         ]);
     }
 }

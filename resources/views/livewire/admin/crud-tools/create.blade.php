@@ -174,17 +174,23 @@
 
                             <div class="col-md-3 mb-2">
                                 <label class="form-label">تاریخ تولید</label>
-                                <input required type="date"
+                                <input  data-jdp
+                                        data-jdp-only-date="true"
                                        class="form-control @error('dateOfSale') is-invalid @enderror"
-                                       wire:model="dateOfSale">
+                                        wire:model.defer="dateOfSale"
+
                                 @error('dateOfSale') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="col-md-3 mb-2">
+
                                 <label class="form-label">تاریخ انقضا</label>
-                                <input required type="date"
-                                       class="form-control @error('dateOfexp') is-invalid @enderror"
-                                       wire:model="dateOfexp">
+                                <input
+                                    data-jdp
+                                    data-jdp-only-date="true"
+                                    class="form-control @error('dateOfSale') is-invalid @enderror"
+                                    wire:model.defer="dateOfexp">
+
                                 @error('dateOfexp') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
