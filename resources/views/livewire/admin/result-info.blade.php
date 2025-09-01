@@ -12,8 +12,9 @@
 {{--                        <p>{{$countTools}}</p>--}}
                     </div></a>
                     <div class="box-widget-admin">
-                        <h6>مجموع جم ثبت شده </h6>
-{{--                        <p>{{$countJam}}</p>--}}
+                        <a href="{{route('admin.info.UserActivityDashboard')}}">
+                        <h6>گزارش یوزرها </h6>
+                        </a>
                     </div>
                     <div class="box-widget-admin">
                         <h6>مجموع تعداد ابزار خارج از انبار</h6>

@@ -40,6 +40,7 @@ Route::middleware(['auth', 'role:admin,author'])->prefix('admin')->group(functio
 
     // اطلاعات و گزارش‌ها
     Route::get('/info', App\Livewire\Admin\ResultInfo::class)->name('admin.result-info');
+    Route::get('/info/UserActivityDashboard', App\Livewire\Admin\Infos\Users\UserActivityDashboard::class)->name('admin.info.UserActivityDashboard');
     Route::get('/info/tools/{toolId}', App\Livewire\Admin\Infos\Tools::class)->name('admin.result.tools');
     Route::get('/activities', \App\Livewire\Admin\UserActivities::class)->name('admin.activities');
     // پرسنل و کاربران
