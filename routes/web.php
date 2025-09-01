@@ -53,6 +53,7 @@ Route::middleware(['auth', 'role:admin,author'])->prefix('admin')->group(functio
     Route::get('/transfer/index', App\Livewire\Admin\Transfer\Index::class)->name('admin.transfer.index');
     Route::get('/transfer/form', App\Livewire\Admin\Transfer\TransferForm::class)->name('admin.transfer.form');
     Route::get('/transfer/show/{id}', App\Livewire\Admin\Transfer\Show::class)->name('admin.transfer.show');
+    Route::get('/transfer/{transfer}/return', App\Livewire\Admin\Transfer\TransferReturnForm::class)->name('transfer.return');
 
     //حروجی pdf excel
 //    Route::get('/export', App\Livewire\Component\Export::class)->name('admin.export');

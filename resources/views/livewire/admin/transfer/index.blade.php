@@ -63,20 +63,26 @@
 {{--                                    </ul>--}}
 {{--                                </td>--}}
 
+
                                 <td class="px-2 py-1">{{ jDate($transfer->created_at)->format('Y/m/d')}}</td>
                                 <td class="px-2 py-1">
-                                    <a href="{{route('admin.tools.edit',$transfer->id)}}">
-                                        <button class="btn btn-sm btn-outline-warning">ویرایش</button>
-                                    </a>
-
-
+                                    @if($transfer->status == 'returned')
+                                        <a href="{{ route('transfer.return', $transfer->id) }}"
+                                           onclick="return confirm('⚠️ این انتقال قبلاً ویرایش شده است. آیا مطمئن هستید می‌خواهید دوباره ویرایش کنید؟')">
+                                            <button class="btn btn-sm btn-outline-secondary">ویرایش مجدد</button>
+                                        </a>
+                                    @else
+                                        <a href="{{ route('transfer.return', $transfer->id) }}">
+                                            <button class="btn btn-sm btn-outline-warning">ویرایش</button>
+                                        </a>
+                                    @endif
 
                                     <button wire:click="delete({{ $transfer->id }})"
                                             class="btn btn-sm btn-outline-danger"
                                             onclick="return confirm('آیا مطمئن هستید؟')">حذف
                                     </button>
-
                                 </td>
+
                             </tr>
 
                         @endforeach
