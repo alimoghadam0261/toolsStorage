@@ -7,18 +7,16 @@
                 <br>
 
                   <div class="widgets-admin">
-                      <a class="box-widget-admin" href="{{route('admin.activities')}}">  <div >
-                        <h6>گزارشات پرسنل</h6>
-{{--                        <p>{{$countTools}}</p>--}}
-                    </div></a>
+
                     <div class="box-widget-admin">
                         <a href="{{route('admin.info.UserActivityDashboard')}}">
-                        <h6>گزارش یوزرها </h6>
+                        <h6>گزارشات پرسنل </h6>
                         </a>
                     </div>
                     <div class="box-widget-admin">
-                        <h6>مجموع تعداد ابزار خارج از انبار</h6>
-                        <p>1234</p>
+                        <a href="{{route('admin.info.Toolscharts')}}">
+                        <h6>گزارشات ابزار ها </h6>
+                        </a>
                     </div>
                     <div class="box-widget-admin">
                         <h6>مجموع جم خارج از انبار</h6>

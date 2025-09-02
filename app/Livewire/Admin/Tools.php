@@ -165,7 +165,7 @@ class Tools extends Component
 
     public function render()
     {
-        $tools = $this->loadToolsQuery()->paginate(10);
+        $tools = $this->loadToolsQuery()->paginate(20);
         $count = $tools->total();
 
         return view('livewire.admin.tools', compact('tools', 'count'));

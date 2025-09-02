@@ -10,9 +10,13 @@ class Dashboard extends Component
 {
     public $countJam;
     public $countTools;
+    public $lowTools;
 
     public function mount()
     {
+        $this->lowTools = ToolsDetail::with('information')
+            ->where('count', '<', 10)
+            ->get();
         $this->countJam =ToolsDetail::where('category', 'IPR-')->count();
         $this->countTools =ToolsDetail::where('category','tools')->count();
    }

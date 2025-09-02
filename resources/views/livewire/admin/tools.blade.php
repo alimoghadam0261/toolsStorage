@@ -5,7 +5,7 @@
                 @livewire('component.admin.topmenu')
                 <hr>
                 <div class="widgets-admin">
-                    <div class="box-widget-admin" style="background: #ddf0f8">
+                    <div class="box-widget-admin" style="background: #ddf0f8; transform: translateY(1em)">
                         <a href="{{route('admin.tools.create')}}">
                             <br>
 
@@ -39,45 +39,47 @@
                     <div class="col-md-12">
                         <div class="box-storage-admin">
                             <div class="row test-storage-info">
-                                <div class="col-md-2" style="margin-top:1.5em;" >
+                                <div class="col-md-2" style="margin-top:1.5em;">
 
                                     <span
-style="font-weight: bold"
+                                        style="font-weight: bold"
                                     >مجموع ابزار آلات : {{ $count }}</span>
 
                                 </div>
 
-                                <div class="col-md-8 text-center">
+                                <div class="col-md-8 export-tools-page text-center">
 
                                     <div class="row mb-3" dir="rtl">
                                         <div class="col-md-3">
                                             <label>از تاریخ</label>
                                             <input data-jdp
-                                                   data-jdp-only-date="true" class="form-control-sm" wire:model.defer="date_from">
+                                                   data-jdp-only-date="true" class="form-control-sm"
+                                                   wire:model.defer="date_from">
                                         </div>
                                         <div class="col-md-3">
                                             <label>تا تاریخ</label>
-                                            <input     data-jdp
-                                                       data-jdp-only-date="true"
+                                            <input data-jdp
+                                                   data-jdp-only-date="true"
 
-                                                     class="form-control-sm" wire:model.defer="date_to">
+                                                   class="form-control-sm" wire:model.defer="date_to">
                                         </div>
-                                        <div class="col-md-3"   style="transform: translate(3em ,.2em)">
+                                        <div class="col-md-3" style="transform: translate(3em ,.2em)">
                                             <label>نوع خروجی</label><br>
                                             <select class="form-select-sm" wire:model="exportFormat">
                                                 <option value="pdf">PDF</option>
                                                 <option value="excel">Excel</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 d-flex align-items-start " >
+                                        <div class="col-md-3 d-flex align-items-start  ">
                                             <button
                                                 style="transform: translate(4em ,1.7em)"
-                                                wire:click="export" class="btn btn-info btn-sm">دانلود</button>
+                                                wire:click="export" class="btn btn-info btn-sm">دانلود
+                                            </button>
                                         </div>
                                     </div>
 
                                     <script>
-                                        window.addEventListener('open-export-url', function(e){
+                                        window.addEventListener('open-export-url', function (e) {
                                             const url = e.detail.url;
                                             // باز کردن در تب جدید
                                             window.open(url, '_blank');
@@ -87,7 +89,7 @@ style="font-weight: bold"
 
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-2 sort-tools-page">
 
 
                                     <label for="">فیلتر بر اساس</label><br>
@@ -111,6 +113,7 @@ style="font-weight: bold"
                                     <th>تصویر</th>
                                     <th>نام</th>
                                     <th>سریال</th>
+                                    <th>سریال1</th>
                                     <th>تعداد</th>
                                     <th>تحویل گیرنده</th>
                                     <th>قیمت</th>
@@ -138,7 +141,7 @@ style="font-weight: bold"
                                         <td>{{ $index+1 }}</td>
                                         <td>
                                             @if($tool->details && $tool->details->attach)
-                                                <img src="{{ asset('storage/tools/' . $tool->details->attach) }}"
+                                                <img loading="lazy" src="{{ asset('storage/tools/' . $tool->details->attach) }}"
                                                      width="50" alt="{{ $tool->name }}"/>
                                             @else
                                                 <img src="{{ asset('img/default.png') }}" width="50"
@@ -152,6 +155,7 @@ style="font-weight: bold"
                                         </td>
 
                                         <td>{{ $tool->serialNumber }}</td>
+                                        <td>{{ $tool->details->companynumber?? 'ثبت نشده'}}</td>
                                         <td style="{{ $bgColor }}">{{ $tool->details->count ?? '-' }}</td>
 
                                         <td>{{ $tool->details->	Receiver ?? '-' }}</td>
@@ -183,18 +187,20 @@ style="font-weight: bold"
                                         </td>
 
                                         <td class="text-center">
-                                            <a href="{{route('admin.tools.edit',$tool->id)}}"
-                                               onclick="event.stopPropagation()">
-                                                <button class="btn btn-sm btn-outline-warning">ویرایش</button>
-                                            </a>
 
                                             <a href="{{ route('admin.result.tools', $tool->id) }}"
                                                onclick="event.stopPropagation()">
                                                 <button class="btn btn-sm btn-info">گزارش</button>
                                             </a>
 
+                                            <a href="{{route('admin.tools.edit',$tool->id)}}"
+                                               onclick="event.stopPropagation()">
+                                                <button class="btn btn-sm btn-warning">ویرایش</button>
+                                            </a>
+
+
                                             <button wire:click.stop="delete({{ $tool->id }})"
-                                                    class="btn btn-sm btn-outline-danger"
+                                                    class="btn btn-sm btn-danger"
                                                     onclick="event.stopPropagation(); return confirm('آیا مطمئن هستید؟')">
                                                 حذف
                                             </button>
@@ -222,22 +228,26 @@ style="font-weight: bold"
         </div>
     </div>
     <!-- qrious: کتابخانه سبک که canvas تولید می‌کند -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    {{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>--}}
+    <script src="{{asset('./js/qrcode.js')}}"></script>
 
     <!-- robust QR script: load qrious if needed, build QR after DOM/livewire/mutations -->
+    <!-- qrious: کتابخانه سبک که canvas تولید می‌کند -->
     <script>
         (function () {
-            const QRIousCDN = 'https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js';
+            // مسیر درست فایل JS با استفاده از لاراول
+            const QRIousCDN = "{{ asset('js/qrcode.js') }}";
+
             let qriousLoading = false;
             let qriousLoaded = !!window.QRious;
 
+            // تابع لود QRious در صورت نیاز
             function loadQriousIfNeeded(callback) {
                 if (window.QRious) {
                     qriousLoaded = true;
                     return callback && callback();
                 }
                 if (qriousLoading) {
-                    // poll until loaded
                     const i = setInterval(() => {
                         if (window.QRious) {
                             clearInterval(i);
@@ -259,83 +269,81 @@ style="font-weight: bold"
                 };
                 s.onerror = function (e) {
                     qriousLoading = false;
-                    console.error('[QR] failed to load qrious from CDN', e);
-                    // (در صورت نیاز می‌توان نسخه محلی استفاده کرد)
+                    console.error('[QR] failed to load qrious from', QRIousCDN, e);
                 };
                 document.head.appendChild(s);
             }
 
+            // ایجاد QR برای یک المان
             function generateSingle(holder) {
-                try {
-                    if (!holder) return;
-                    if (holder.dataset.qrGenerated === "1") return;
-                    // clear
-                    holder.innerHTML = '';
-                    const url = holder.getAttribute('data-qrcode-url') || window.location.href;
-                    const size = parseInt(holder.getAttribute('data-qrcode-size') || '90', 10);
+                if (!holder) return;
+                if (holder.dataset.qrGenerated === "1") return;
 
-                    const canvas = document.createElement('canvas');
-                    canvas.width = size;
-                    canvas.height = size;
-                    holder.appendChild(canvas);
+                holder.innerHTML = '';
+                const url = holder.getAttribute('data-qrcode-url') || window.location.href;
+                const size = parseInt(holder.getAttribute('data-qrcode-size') || '90', 10);
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                holder.appendChild(canvas);
 
-                    // اگر qrious موجود نیست، صبر کن تا لود شود
-                    if (!window.QRious) {
-                        console.warn('[QR] QRious not present yet for', holder);
-                        return;
-                    }
-
-                    new QRious({
-                        element: canvas,
-                        value: url,
-                        size: size,
-                        level: 'H'
+                if (!window.QRious) {
+                    loadQriousIfNeeded(() => {
+                        generateSingle(holder);
                     });
-
-                    holder.dataset.qrGenerated = "1";
-                    // برای debug:
-                    // console.log('[QR] generated for', url, '->', holder.id);
-                } catch (err) {
-                    console.error('[QR] error generating for holder', holder, err);
-                }
-            }
-
-            function generateAll() {
-                if (!document.body) return;
-                const holders = Array.from(document.querySelectorAll('.qrcode-holder'));
-                if (!holders.length) {
-                    // console.log('[QR] no holders found');
                     return;
                 }
-                // اگر qrious هنوز لود نشده، سعی کن آن را لود کنی و سپس ادامه بده
+
+                new QRious({
+                    element: canvas,
+                    value: url,
+                    size: size,
+                    level: 'H'
+                });
+
+                holder.dataset.qrGenerated = "1";
+            }
+
+            // ایجاد QR برای همه المان‌ها
+            function generateAll() {
+                const holders = Array.from(document.querySelectorAll('.qrcode-holder'));
+                if (!holders.length) return;
+
                 if (!window.QRious) {
                     loadQriousIfNeeded(() => {
                         holders.forEach(generateSingle);
                     });
                     return;
                 }
+
                 holders.forEach(generateSingle);
             }
 
+            // فعال کردن دکمه‌های دانلود QR
             function initQRDownloadButtons() {
                 document.querySelectorAll('.download-qr').forEach(btn => {
                     if (btn.dataset.bound === "1") return;
                     btn.dataset.bound = "1";
-                    btn.addEventListener('click', function (e) {
+
+                    btn.addEventListener('click', e => {
                         e.preventDefault();
                         e.stopPropagation();
+
                         const target = btn.getAttribute('data-target');
                         if (!target) return;
+
                         const holder = document.querySelector(target);
                         if (!holder) {
                             alert('کانتینر QR پیدا نشد.');
                             return;
                         }
+
                         const canvas = holder.querySelector('canvas');
                         if (!canvas) {
                             alert('QR هنوز ساخته نشده است. لطفاً چند لحظه صبر کنید یا صفحه را رفرش کنید.');
                             return;
                         }
+
                         try {
                             const dataUrl = canvas.toDataURL('image/png');
                             const link = document.createElement('a');
@@ -353,48 +361,34 @@ style="font-weight: bold"
                 });
             }
 
-            // ناظر تغییرات DOM: اگر المان‌های جدید اضافه شدند، دوباره تلاش کن
-            const observer = new MutationObserver((mutations) => {
-                let found = false;
-                for (const m of mutations) {
-                    if (m.addedNodes && m.addedNodes.length) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (found) {
-                    // ریست flag برای المان‌هایی که تازه اضافه شدند
-                    document.querySelectorAll('.qrcode-holder').forEach(h => {
-                        if (!h.dataset.qrGenerated) h.dataset.qrGenerated = "0";
-                    });
-                    // اجازه بده اندکی تا DOM پایدار بشه سپس بساز
-                    setTimeout(() => {
-                        generateAll();
-                        initQRDownloadButtons();
-                    }, 120);
-                }
+            // ناظر DOM برای Livewire یا المان‌های جدید
+            const observer = new MutationObserver(() => {
+                document.querySelectorAll('.qrcode-holder').forEach(h => {
+                    if (!h.dataset.qrGenerated) h.dataset.qrGenerated = "0";
+                });
+                setTimeout(() => {
+                    generateAll();
+                    initQRDownloadButtons();
+                }, 120);
             });
 
-            // شروع‌کننده: اجرا روی رویدادها
+            // شروع‌کننده
             function boot() {
-                // اگر qrious هنوز موجود نیست، سعی می‌کنیم آن را لود کنیم (غیرفعال کردن خطا در شبکه)
                 loadQriousIfNeeded(() => {
                     generateAll();
                     initQRDownloadButtons();
                 });
 
-                // fallback: اگر Livewire هست، به hook وصل شو، در غیر این صورت فقط اجرا کن
+                // هماهنگ با Livewire
                 if (window.Livewire && typeof Livewire.hook === 'function') {
                     Livewire.hook('message.processed', () => {
-                        // فلگ را برای المان‌های جدید ریست کن
                         document.querySelectorAll('.qrcode-holder').forEach(h => h.dataset.qrGenerated = "0");
-                        // کمی تاخیر بده تا DOM Livewire تکمیل شود
                         setTimeout(() => {
                             generateAll();
                             initQRDownloadButtons();
                         }, 80);
                     });
-                    // هم‌چنین اگر event load livewire فعال شد
+
                     document.addEventListener('livewire:load', () => {
                         setTimeout(() => {
                             generateAll();
@@ -402,7 +396,6 @@ style="font-weight: bold"
                         }, 60);
                     });
                 } else {
-                    // اگر Livewire وجود ندارد، فقط در load و DOMContentLoaded بساز
                     document.addEventListener('DOMContentLoaded', () => {
                         setTimeout(() => {
                             generateAll();
@@ -417,28 +410,21 @@ style="font-weight: bold"
                     });
                 }
 
-                // استارت observer روی body
                 try {
                     observer.observe(document.body, {childList: true, subtree: true});
                 } catch (e) {
                     console.warn('[QR] MutationObserver not supported', e);
                 }
-
-                // اجرای اولیه
-                setTimeout(() => {
-                    generateAll();
-                    initQRDownloadButtons();
-                }, 120);
             }
 
-            // اجرا
             boot();
 
-            // در صورت نیاز برای debug می‌تونی این تابع‌ها را دستی صدا بزنی:
+            // دسترسی دستی برای debug
             window._qr_generateAll = generateAll;
             window._qr_initDownloads = initQRDownloadButtons;
 
         })();
     </script>
+
 
 </div>

@@ -11,49 +11,59 @@
                 <br>
 
                 <div class="container-fluid py-4">
-                    <h2 class="mb-4">📊 داشبورد تحلیلی فعالیت کاربران</h2>
+                 <div class="row">
+                     <div class="col-md-6"><h2 class="mb-4">📊 داشبورد تحلیلی فعالیت کاربران</h2></div>
+                     <div class="col-md-6">
+                         <div class="widgets-admin">
+                             <a  class="box-widget-admin p-3" href="{{route('admin.activities')}}">
+                                 <h6> جزئیات عملکرد پرسنل</h6>
+                             </a>
+                         </div>
+                     </div>
 
+
+                 </div>
                     {{-- فیلترها --}}
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-body">
-                            <div class="row g-3">
-                                <div class="col-md-3">
-                                    <label class="form-label">از تاریخ</label>
-                                    <input type="date" class="form-control" wire:model.live="fromDate">
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">تا تاریخ</label>
-                                    <input type="date" class="form-control" wire:model.live="toDate">
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label">بازه</label>
-                                    <select class="form-select" wire:model.live="range">
-                                        <option value="day">روزانه</option>
-                                        <option value="week">هفتگی</option>
-                                        <option value="month">ماهانه</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label">نقش</label>
-                                    <select class="form-select" wire:model.live="selectedRole">
-                                        <option value="">همه</option>
-                                        @foreach($roles as $role)
-                                            <option value="{{ $role }}">{{ $role }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label">کاربر</label>
-                                    <select class="form-select" wire:model.live="selectedUser">
-                                        <option value="">همه</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+{{--                    <div class="card shadow-sm mb-4">--}}
+{{--                        <div class="card-body">--}}
+{{--                            <div class="row g-3">--}}
+{{--                                <div class="col-md-3">--}}
+{{--                                    <label class="form-label">از تاریخ</label>--}}
+{{--                                    <input type="date" class="form-control" wire:model.live="fromDate">--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-3">--}}
+{{--                                    <label class="form-label">تا تاریخ</label>--}}
+{{--                                    <input type="date" class="form-control" wire:model.live="toDate">--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-2">--}}
+{{--                                    <label class="form-label">بازه</label>--}}
+{{--                                    <select class="form-select" wire:model.live="range">--}}
+{{--                                        <option value="day">روزانه</option>--}}
+{{--                                        <option value="week">هفتگی</option>--}}
+{{--                                        <option value="month">ماهانه</option>--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-2">--}}
+{{--                                    <label class="form-label">نقش</label>--}}
+{{--                                    <select class="form-select" wire:model.live="selectedRole">--}}
+{{--                                        <option value="">همه</option>--}}
+{{--                                        @foreach($roles as $role)--}}
+{{--                                            <option value="{{ $role }}">{{ $role }}</option>--}}
+{{--                                        @endforeach--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-2">--}}
+{{--                                    <label class="form-label">کاربر</label>--}}
+{{--                                    <select class="form-select" wire:model.live="selectedUser">--}}
+{{--                                        <option value="">همه</option>--}}
+{{--                                        @foreach($users as $user)--}}
+{{--                                            <option value="{{ $user->id }}">{{ $user->name }}</option>--}}
+{{--                                        @endforeach--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
                     {{-- نمودارها --}}
                     <div class="row g-4">

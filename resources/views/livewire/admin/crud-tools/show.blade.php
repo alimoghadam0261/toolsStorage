@@ -13,9 +13,9 @@
 
 
                                 @if($tool->details && $tool->details->attach)
-                                    <img src="{{ asset('storage/tools/' . $tool->details->attach) }}" width="200" alt="{{ $tool->name }}" />
+                                    <img loading="lazy" src="{{ asset('storage/tools/' . $tool->details->attach) }}" width="200" alt="{{ $tool->name }}" />
                                 @else
-                                    <img src="{{ asset('img/default.png') }}" width="200" alt="{{ $tool->name }}" />
+                                    <img loading="lazy" src="{{ asset('img/default.png') }}" width="200" alt="{{ $tool->name }}" />
                                 @endif
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                             </div >
                             <div class="box-show-detail">
                                 <span><strong> شماره سریال شرکتی:</strong></span><br><span
-                                    dir="ltr">{{$tool->companynumber != null ? $tool->companynumber : "ندارد"}}</span>
+                                    dir="ltr">{{$tool->details->companynumber != null ? $tool->details->companynumber : "ثبت نشده "}}</span>
                             </div >
                             <div class="box-show-detail" style = "{{$tool->details->count < 10 ? 'animation:2s alarm linear infinite' : ''}}">
                                 <span><strong>تعداد:</strong></span><br><span>{{$tool->details->count}}</span>
@@ -101,6 +101,9 @@
                     @endforeach
                     </tbody>
                 </table>
+                <br><br><br><br>
+                <br><br><br><br>
+
                 </div>
 
                 <div class="col-md-2">

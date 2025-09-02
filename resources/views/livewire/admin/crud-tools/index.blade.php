@@ -29,7 +29,7 @@
                             </div>
                             <div class="col-md-3 mb-2">
                                 <label>شماره سریال شرکتی</label>
-                                <input  type="text" class="form-control" wire:model="companynumber">
+                                <input  type="number" class="form-control" wire:model="companynumber">
                             </div>
                             <div class="col-md-3 mb-2">
                                 <label>تحویل گیرنده</label>
@@ -41,7 +41,7 @@
                             </div>
                             <div class="col-md-3 mb-2">
                                 <label>مدل</label>
-                                <input required type="number" class="form-control" wire:model="model">
+                                <input  type="text" class="form-control" wire:model="model">
                             </div>
                             <div class="col-md-3 mb-2">
                                 <label>وضعیت</label>
@@ -88,11 +88,11 @@
 
                             <div class="col-md-3 mb-2">
                                 <label>تاریخ فروش</label>
-                                <input required type="date" class="form-control" wire:model="dateOfSale">
+                                <input  type="date" class="form-control" wire:model="dateOfSale">
                             </div>
                             <div class="col-md-3 mb-2">
                                 <label>تاریخ انقضا</label>
-                                <input required type="date" class="form-control" wire:model="dateOfexp">
+                                <input  type="date" class="form-control" wire:model="dateOfexp">
                             </div>
 
 

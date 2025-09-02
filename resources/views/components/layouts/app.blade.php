@@ -16,8 +16,8 @@
         'resources/css/app.css',
 
         'resources/js/app.js',
-        'resources/js/chart.js',
-        'resources/js/vis-network.js'
+//        'resources/js/chart.js',
+//        'resources/js/vis-network.js'
         ])
     </head>
     <body>

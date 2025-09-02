@@ -44,6 +44,8 @@ class Index extends Component
         $this->storages = Storage::select('id', 'name')->get();
     }
 
+    
+
     public function updateTool()
     {
         $info = ToolsInformation::findOrFail($this->toolId);
@@ -71,8 +73,8 @@ class Index extends Component
             'StorageLocation' => $this->StorageLocation,
             'Receiver' => $this->Receiver,
             'color' => $this->color,
-            'dateOfSale' => $this->dateOfSale,
-            'dateOfexp' => $this->dateOfexp,
+//            'dateOfSale' => $this->dateOfSale,
+//            'dateOfexp' => $this->dateOfexp,
             'content' => $this->content,
         ]);
 

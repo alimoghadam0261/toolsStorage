@@ -40,7 +40,25 @@
               </div>
 
 
+              <br>
 
+          </div>
+          <div class="ticker-wrap-dashboard">
+              <span class="text-right" dir="rtl">ابزار های در حال کاهش :</span>
+              <div class="ticker-dashboard">
+                  @foreach($lowTools as $item)
+                      <div class="ticker-item-dashboard">
+                          {{ $item->information->name }} (تعداد: {{ $item->count }})
+                      </div>
+                  @endforeach
+
+                  {{-- 👇 تکرار مجدد برای ایجاد لوپ نرم --}}
+                  @foreach($lowTools as $item)
+                      <div class="ticker-item-dashboard">
+                          {{ $item->information->name }} (تعداد: {{ $item->count }})
+                      </div>
+                  @endforeach
+              </div>
           </div>
 
           <div class="col-md-2">

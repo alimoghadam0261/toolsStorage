@@ -19,14 +19,14 @@
                             <div class="personal-list">
                                 <table class="table table-striped ">
                                     <thead>
-                                    <tr class="table-dark">
+                                    <tr class="table-light">
                                         <th scope="col">#</th>
                                         <th scope="col">نام</th>
                                         <th scope="col">شماره پرسنلی</th>
                                         <th scope="col">سطح دسترسی</th>
                                         <th scope="col">محل خدمت</th>
                                         <th scope="col">دسترسی انبار</th>
-                                        <th scope="col">تغییرات</th>
+{{--                                        <th scope="col">تغییرات</th>--}}
                                         <th scope="col">حدف</th>
 
                                     </tr>
@@ -41,7 +41,7 @@
                                             <td>{{$item->department}}</td>
                                             <td>{{$item->storage}}</td>
 
-                                            <td><a href=""><i class="fa fa-edit"></i></a></td>
+{{--                                            <td><a href=""><i class="fa fa-edit"></i></a></td>--}}
                                             <td>
                                                 <form action="{{ route('admin.users.destroy', $item->id) }}" method="POST"
                                                       style="display:inline;">

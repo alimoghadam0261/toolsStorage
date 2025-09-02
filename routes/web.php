@@ -20,6 +20,10 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 // =================== خروج ===================
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
+
+
+
+Route::get('/tools/show/{id}', App\Livewire\Admin\CrudTools\Show::class)->name('admin.tools.show');
 // =================== داشبورد و پنل ادمین ===================
 Route::middleware(['auth', 'role:admin,author'])->prefix('admin')->group(function () {
 
@@ -36,11 +40,12 @@ Route::middleware(['auth', 'role:admin,author'])->prefix('admin')->group(functio
     Route::get('/tools', App\Livewire\Admin\Tools::class)->name('admin.tools');
     Route::get('/tools/create', App\Livewire\Admin\CrudTools\Create::class)->name('admin.tools.create');
     Route::get('/tools/edit/{id}', App\Livewire\Admin\CrudTools\Index::class)->name('admin.tools.edit');
-    Route::get('/tools/show/{id}', App\Livewire\Admin\CrudTools\Show::class)->name('admin.tools.show');
+
 
     // اطلاعات و گزارش‌ها
     Route::get('/info', App\Livewire\Admin\ResultInfo::class)->name('admin.result-info');
     Route::get('/info/UserActivityDashboard', App\Livewire\Admin\Infos\Users\UserActivityDashboard::class)->name('admin.info.UserActivityDashboard');
+    Route::get('/info/Toolscharts', App\Livewire\Admin\Infos\Tools\Toolscharts::class)->name('admin.info.Toolscharts');
     Route::get('/info/tools/{toolId}', App\Livewire\Admin\Infos\Tools::class)->name('admin.result.tools');
     Route::get('/activities', \App\Livewire\Admin\UserActivities::class)->name('admin.activities');
     // پرسنل و کاربران

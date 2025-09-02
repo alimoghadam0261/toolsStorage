@@ -3,7 +3,7 @@
       <div class="row">
           <div class="col-md-4" style="text-align: right" id="datetime1" ></div>
 
-          <div class="col-md-4"><p>شعار سال : سرمایه‌گذاری برای تولید</p></div>
+          <div class="col-md-4"><p style="transform: translateY(-5px)">شعار سال : سرمایه‌گذاری برای تولید</p></div>
           <div class="col-md-4">
               <div class="row ">
 

@@ -462,6 +462,50 @@ body {
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
+
+.ticker-wrap-dashboard {
+    position: absolute;
+    bottom: 1px;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    background: #063168; /* بکگراند تیره */
+    color: #e0f7ff; /* متن روشن */
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.ticker-dashboard {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: ticker 35s linear infinite; /* سرعت حرکت */
+}
+.ticker-wrap-dashboard span{
+    position: absolute;right:15.8em;
+    padding-top: 3px;
+    width: 190px;
+    height: 40px;
+    background: #063168;
+    z-index: 2;
+
+}
+.ticker-item-dashboard {
+    display: inline-block;
+    padding: 0 2rem;
+    font-size: .8rem;
+    font-weight: bold;
+}
+
+@keyframes ticker {
+    0% { transform: translateX(-100%); }  /* پایان: بیرون از سمت چپ */
+    100%   { transform: translateX(160%); }   /* شروع: بیرون از سمت راست */
+}
+
+
+
+
+
 /*=================================================================*/
 /*=================================================================*/
 /*=================================================================*/
@@ -581,7 +625,7 @@ to {
     h1, h2, h3, h4, h5, h6 {
         font-size: .7em
     }
-
+    .ticker-wrap-dashboard{display: none;}
     .sidebar-component {
         display: none;
     }
@@ -596,6 +640,7 @@ to {
         border-bottom: 1px solid silver;
         position: fixed;
         top: 0;
+        z-index: 2;
         height: 2.2em;
     }
 
@@ -671,4 +716,23 @@ to {
         text-align: right;
         transform: translateY(-2.2em);
     }
+
+/*    =================show tools ============*/
+    .box-show-detail{
+        border: 1px solid gray;
+        border-radius: 5px;
+        width: 8em;
+        height: auto;
+        padding: .5em;
+        margin: .5em;
+        background: #e2eaec;
+        text-align: center;
+
+    }
+    /*    ================= tools page ============*/
+    .export-tools-page{
+        transform: translate(2.5em,1em);
+        padding:1em;
+    }
+
 }
