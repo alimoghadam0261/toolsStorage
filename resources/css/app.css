@@ -100,23 +100,23 @@ strong {
 }
 
 @font-face {
-    font-family: 'IRANSans';
-    src: url('/public/fonts/IRANSans.ttf') format('ttf'),
-    url('/public/fonts/IRANSans.ttf') format('ttf');
+    font-family: '1';
+    src: url('/public/fonts/Vazir.woff') format('woff'),
+    url('/public/fonts/Vazir.woff') format('woff');
     font-weight: normal;
     font-style: normal;
+}
+
+
+body {
+    font-family: '1', Tahoma, sans-serif;
+    background: #f2f3f5;
 }
 
 .col-md-10, .storage-de {
     height: 100%;
     transform: translateX(-1em);
 }
-
-body {
-    font-family: 'IRANSans', Tahoma, sans-serif;
-    background: #f2f3f5;
-}
-
 
 .fa-edit {
     color: #a3dca3;
@@ -175,7 +175,7 @@ body {
 
 
 .logo-home-page {
-    display: flex
+    display: flex;
 
 }
 
@@ -285,6 +285,7 @@ body {
     list-style: none;
     padding: 0;
     margin: 0;
+
 }
 
 .sidebar-menu li {
@@ -403,6 +404,7 @@ body {
     text-align: center;
     background: #f2f3f5;
     height: 1.5em;
+
 }
 
 /*=================================================================*/
@@ -414,6 +416,7 @@ body {
 
 .dashboard-admin {
     background: #f2f3f5;
+
 
 }
 
@@ -474,6 +477,7 @@ body {
     height: 40px;
     display: flex;
     align-items: center;
+
 }
 
 .ticker-dashboard {
@@ -736,3 +740,5 @@ to {
     }
 
 }
+
+

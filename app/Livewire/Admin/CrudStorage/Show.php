@@ -7,25 +7,20 @@ use App\Models\Storage;
 use App\Models\ToolsInformation;
 use App\Models\ToolsLocation;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Show extends Component
 {
-
+    use WithPagination;
 
     public $storages;
-    public $locations;
+//    public $locations;
 
     public function mount($id)
     {
         $this->storages = Storage::findOrFail($id);
 
-        $this->locations = ToolsLocation::with(['tool.details'])
-            ->where('location', $this->storages->name)
-            ->whereHas('tool', function ($q) {
-                $q->whereNull('deleted_at'); // فقط ابزارهایی که حذف نشده‌اند
-            })
-            ->orderBy('moved_at', 'desc')
-            ->get();
+
     }
 
 
@@ -33,6 +28,16 @@ class Show extends Component
 
     public function render()
     {
-        return view('livewire.admin.crud-storage.show');
+        $locations = ToolsLocation::with(['tool.details'])
+            ->where('location', $this->storages->name)
+            ->whereHas('tool', function ($q) {
+                $q->whereNull('deleted_at');
+            })
+            ->orderBy('moved_at', 'desc')
+            ->paginate(20);
+
+        return view('livewire.admin.crud-storage.show', [
+            'locations' => $locations
+        ]);
     }
 }

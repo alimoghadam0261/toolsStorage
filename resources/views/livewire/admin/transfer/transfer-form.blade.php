@@ -50,6 +50,20 @@
                         </div>
 
                         <div class="mb-3">
+                            <label>تصویر:</label>
+                            <input type="file" wire:model.live="image" class="form-control">
+                            @error('image') <span class="text-danger">{{ $message }}</span> @enderror
+
+                            @if ($image)
+                                <div class="mt-2">
+                                    پیش‌نمایش:
+                                    <img src="{{ $image->temporaryUrl() }}" class="img-thumbnail" width="200">
+                                </div>
+                            @endif
+                        </div>
+
+
+                        <div class="mb-3">
                             <label>توضیحات:</label>
                             <textarea wire:model.live="note" class="form-select"></textarea>
                         </div>

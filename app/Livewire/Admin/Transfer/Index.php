@@ -24,7 +24,13 @@ class Index extends Component
 //                ->get();
 //        }
 //    }
+    public function delete($id)
+    {
+        $transfer = Transfer::findOrFail($id);
+        $transfer->delete(); // Soft Delete
 
+        session()->flash('success', 'انتقال با موفقیت حذف شد (نرم‌حذف) ✅');
+    }
 
     public function test($id)
     {

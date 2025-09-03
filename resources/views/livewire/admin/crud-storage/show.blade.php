@@ -53,20 +53,36 @@
                         </tr>
                         </thead>
                         <tbody>
-
                         @forelse($locations as $index => $location)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $location->tool->name }}</td>
-                                <td>{{ $location->tool->details->count() }}</td>
+
+                                {{-- بررسی وجود ابزار --}}
+                                <td>{{ $location->tool->name ?? '-' }}</td>
+
+                                {{-- تعداد جزئیات ابزار --}}
+                                <td>{{ $location->tool->details->count() ?? 0 }}</td>
+
+                                {{-- مدل ابزار (اولین مدل از details اگر وجود داشته باشد) --}}
                                 <td>
-                                    {{-- اگر details چندتاست، باید مثلا اولین مدل رو نشون بدی --}}
-                                    {{ $location->tool->details->first()->model ?? '-' }}
+                                    {{ optional(optional($location->tool->details)->first())->model ?? '-' }}
                                 </td>
-                                <td>{{ $location->status }}</td>
-                                <td>{{ $location->moved_at ? jdate($location->moved_at)->format('Y-m-d H:i') : '-' }}</td>
+
+                                {{-- وضعیت موجودی --}}
+                                <td>{{ $location->status ?? '-' }}</td>
+
+                                {{-- تاریخ ورود --}}
                                 <td>
-                                    <a href="{{ route('admin.tools.show', $location->tools_information_id) }}" class="btn btn-sm btn-primary">نمایش</a>
+                                    {{ $location->moved_at ? jdate($location->moved_at)->format('Y-m-d H:i') : '-' }}
+                                </td>
+
+                                {{-- عملیات نمایش --}}
+                                <td>
+                                    @if($location->tools_information_id)
+                                        <a href="{{ route('admin.tools.show', $location->tools_information_id) }}" class="btn btn-sm btn-primary">نمایش</a>
+                                    @else
+                                        -
+                                    @endif
                                 </td>
                             </tr>
                         @empty
@@ -74,12 +90,13 @@
                                 <td colspan="7" class="text-center">ابزاری برای این انبار ثبت نشده</td>
                             </tr>
                         @endforelse
-
-
                         </tbody>
+
                     </table>
 
-
+                    <div class="d-flex justify-content-center mt-4 pagination pagination-sm">
+                        {{ $locations->links() }}
+                    </div>
                 </div>
 
 

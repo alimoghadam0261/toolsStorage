@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transfer_items extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'transfer_id',
         'toolsinformation_id',
@@ -14,6 +16,7 @@ class Transfer_items extends Model
         'damaged_qty',
         'lost_qty',
         'note',
+        'image', // اضافه شد
     ];
 
     public function transfer()
@@ -30,5 +33,4 @@ class Transfer_items extends Model
     {
         return $this->belongsTo(ToolsDetail::class, 'toolsdetailes_id');
     }
-
 }

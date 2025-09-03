@@ -50,40 +50,31 @@
                                 <td class="px-2 py-1">{{ $transfer->toStorage->name ?? '-' }}</td>
                                 <td class="px-2 py-1">{{ $transfer->user->name ?? '-' }}</td>
                                 <td class="px-2 py-1"
-                                style="{{$transfer->status == "sent" ? 'background:#f4f474;':'background: #5ac85a'}}"
-                                >{{ $transfer->status == "sent" ? "ارسال" : "برگشت" }}</td>
-{{--                                <td class="px-2 py-1">--}}
-{{--                                    <ul class="list-disc ml-4">--}}
-{{--                                        @foreach($transfer->items as $item)--}}
-{{--                                            <li>--}}
-{{--                                                {{ $item->toolDetail->information->name ?? '---' }}--}}
-{{--                                                ({{ $item->qty }})--}}
-{{--                                            </li>--}}
-{{--                                        @endforeach--}}
-{{--                                    </ul>--}}
-{{--                                </td>--}}
-
-
+                                    style="{{$transfer->status == "sent" ? 'background:#f4f474;':'background: #5ac85a'}}">
+                                    {{ $transfer->status == "sent" ? "ارسال" : "برگشت" }}
+                                </td>
                                 <td class="px-2 py-1">{{ jDate($transfer->created_at)->format('Y/m/d')}}</td>
                                 <td class="px-2 py-1">
+
                                     @if($transfer->status == 'returned')
-                                        <a href="{{ route('transfer.return', $transfer->id) }}"
+                                        <a href="{{ route('transfer.return', $transfer->id) }}" wire:click.stop
                                            onclick="return confirm('⚠️ این انتقال قبلاً ویرایش شده است. آیا مطمئن هستید می‌خواهید دوباره ویرایش کنید؟')">
                                             <button class="btn btn-sm btn-outline-secondary">ویرایش مجدد</button>
                                         </a>
                                     @else
-                                        <a href="{{ route('transfer.return', $transfer->id) }}">
+                                        <a href="{{ route('transfer.return', $transfer->id) }}" wire:click.stop>
                                             <button class="btn btn-sm btn-outline-warning">ویرایش</button>
                                         </a>
                                     @endif
 
-                                    <button wire:click="delete({{ $transfer->id }})"
+                                    <button wire:click.stop="delete({{ $transfer->id }})"
                                             class="btn btn-sm btn-outline-danger"
-                                            onclick="return confirm('آیا مطمئن هستید؟')">حذف
+                                            onclick="return confirm('آیا مطمئن هستید می‌خواهید این انتقال را حذف کنید؟')">
+                                        حذف
                                     </button>
                                 </td>
-
                             </tr>
+
 
                         @endforeach
                         </tbody>

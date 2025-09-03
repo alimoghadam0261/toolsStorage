@@ -4,15 +4,15 @@ namespace App\Livewire\Admin\Transfer;
 
 use App\Models\Storage;
 use App\Models\ToolsDetail;
-
 use App\Models\Transfer;
 use App\Models\Transfer_items;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class TransferForm extends Component
 {
+    use WithFileUploads;
 
     public $fromStorage;
     public $toStorage;
@@ -20,18 +20,16 @@ class TransferForm extends Component
     public $qty;
     public $status;
     public $note;
+    public $image; // اضافه شد
 
     public $tools = [];
     public $transferItems = [];
 
     public function updatedFromStorage($value)
     {
-        // وقتی انبار مبدا انتخاب شد ابزارهاش رو لود کن
         $this->tools = ToolsDetail::with('information')
             ->where('storage_id', $value)
             ->get();
-
-
     }
 
     public function addItem()
@@ -49,9 +47,14 @@ class TransferForm extends Component
             'qty'     => $this->qty,
         ];
 
-        // ریست انتخاب
         $this->selectedTool = null;
         $this->qty = null;
+    }
+
+    public function removeItem($index)
+    {
+        unset($this->transferItems[$index]);
+        $this->transferItems = array_values($this->transferItems);
     }
 
     public function save()
@@ -60,22 +63,25 @@ class TransferForm extends Component
             'fromStorage'   => 'required|different:toStorage',
             'toStorage'     => 'required',
             'transferItems' => 'required|array|min:1',
-
+            'image'         => 'nullable|image|max:2048', // اعتبارسنجی عکس
         ], [
             'fromStorage.required'   => 'انبار مبدا الزامی است.',
             'toStorage.required'     => 'انبار مقصد الزامی است.',
             'fromStorage.different'  => 'انبار مبدا و مقصد نباید یکسان باشند.',
             'transferItems.min'      => 'حداقل یک ابزار باید انتخاب شود.',
+            'image.image'            => 'فایل باید تصویر باشد.',
+            'image.max'              => 'حداکثر حجم فایل ۲ مگابایت است.',
         ]);
 
         DB::transaction(function () {
-            $number = 'TR-' . now()->format('Ymd').random_int(10000, 99999);
+            $number = 'TR-' . now()->format('Ymd') . random_int(10000, 99999);
+
             $transfer = Transfer::create([
                 'from_storage_id' => $this->fromStorage,
                 'to_storage_id'   => $this->toStorage,
                 'number'          => $number,
                 'status'          => $this->status,
-                'note'          => $this->note,
+                'note'            => $this->note,
                 'user_id'         => auth()->id(),
             ]);
 
@@ -92,10 +98,8 @@ class TransferForm extends Component
                     throw new \Exception("موجودی ابزار کافی نیست.");
                 }
 
-                // کم کردن از موجودی انبار مبدا
                 $fromTool->decrement('count', $item['qty']);
 
-                // پیدا کردن یا ساخت رکورد در انبار مقصد
                 $toTool = ToolsDetail::firstOrCreate(
                     [
                         'tools_information_id' => $fromTool->tools_information_id,
@@ -104,7 +108,7 @@ class TransferForm extends Component
                     [
                         'category'         => $fromTool->category,
                         'status'           => $fromTool->status,
-                        'note'           => $fromTool->note,
+                        'note'             => $fromTool->note,
                         'model'            => $fromTool->model,
                         'Weight'           => $fromTool->Weight,
                         'Receiver'         => $fromTool->Receiver,
@@ -121,10 +125,13 @@ class TransferForm extends Component
                     ]
                 );
 
-                // اضافه کردن موجودی به انبار مقصد
                 $toTool->increment('count', $item['qty']);
 
-                // ثبت آیتم انتقال
+                $imagePath = null;
+                if ($this->image) {
+                    $imagePath = $this->image->store('transfer', 'public');
+                }
+
                 Transfer_items::create([
                     'transfer_id'        => $transfer->id,
                     'toolsinformation_id'=> $fromTool->tools_information_id,
@@ -133,13 +140,13 @@ class TransferForm extends Component
                     'damaged_qty'        => 0,
                     'lost_qty'           => 0,
                     'note'               => $this->note,
+                    'image'              => $imagePath,
                 ]);
             }
-
         });
 
         $this->reset();
-        return redirect()->route('admin.transfer.index')->with('success', 'ابزار جدید با موفقیت ثبت شد ✅');
+        return redirect()->route('admin.transfer.index')->with('success', 'انتقال با موفقیت ثبت شد ✅');
     }
 
     public function render()
