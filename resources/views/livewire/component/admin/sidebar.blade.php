@@ -3,7 +3,9 @@
 
 
         <br>
+
         <div class="info-user1"><p><strong>آقای
+
                     {{\Illuminate\Support\Facades\Auth::user()->name}}
                     خوش آمدید</strong></p></div>
         <div class="info-user2">

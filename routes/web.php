@@ -4,8 +4,20 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ToolsExportController;
 
+
+
+
+
+
+
 // صفحه خوش‌آمدگویی کاربر
-Route::get('/', [AuthController::class, 'showLoginForm'])->name('login.page');
+Route::get('/', [AuthController::class, 'showLoginForm'])->name('welcome');
+
+
+// =================== فرم ورود ===================
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
+Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+
 
 Route::get('/home', App\Livewire\User\Home::class)->name('home');
 
@@ -13,9 +25,7 @@ Route::get('/home', App\Livewire\User\Home::class)->name('home');
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
-// =================== فرم ورود ===================
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+
 
 // =================== خروج ===================
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -23,7 +33,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 
-Route::get('/tools/show/{id}', App\Livewire\Admin\CrudTools\Show::class)->name('admin.tools.show');
+
 // =================== داشبورد و پنل ادمین ===================
 Route::middleware(['auth', 'role:admin,author'])->prefix('admin')->group(function () {
 
@@ -40,6 +50,7 @@ Route::middleware(['auth', 'role:admin,author'])->prefix('admin')->group(functio
     Route::get('/tools', App\Livewire\Admin\Tools::class)->name('admin.tools');
     Route::get('/tools/create', App\Livewire\Admin\CrudTools\Create::class)->name('admin.tools.create');
     Route::get('/tools/edit/{id}', App\Livewire\Admin\CrudTools\Index::class)->name('admin.tools.edit');
+    Route::get('/tools/show/{id}', App\Livewire\Admin\CrudTools\Show::class)->name('admin.tools.show');
 
 
     // اطلاعات و گزارش‌ها

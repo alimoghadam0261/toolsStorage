@@ -71,6 +71,13 @@ class AuthController extends Controller
         // ثبت لاگ ورود
         $this->logActivity('login', $user, "کاربر وارد سیستم شد");
 
+        // بررسی آیا کاربر قصد دسترسی به صفحه خاصی داشته است
+        if ($request->session()->has('url.intended')) {
+            $redirectUrl = session('url.intended');
+            $request->session()->forget('url.intended');
+            return redirect($redirectUrl);
+        }
+
         return $this->redirectBasedOnRole($user);
     }
 
@@ -98,7 +105,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login.form');
+        return redirect()->route('welcome');
     }
 
     // حذف نرم کاربر

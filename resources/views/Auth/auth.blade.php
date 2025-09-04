@@ -60,19 +60,21 @@
                             </div>
                         @endif
 
-                        <form method="POST" action="{{ route('login') }}">
+                        <form method="POST" action="{{ route('login.submit') }}">
                             @csrf
 
                             <div class="mb-4">
                                 <label class="block mb-1">نام کاربری :</label>
-                                <input type="number" name="cardNumber" value="{{ old('cardNumber') }}"
+                                <input type="number" inputmode="numeric"
+                                       pattern="[0-9]*"  name="cardNumber" value="{{ old('cardNumber') }}"
                                        class="form-control" required placeholder="شماره پرسنلی">
                                 @error('cardNumber') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
                             </div>
 
                             <div class="mb-4">
                                 <label class="block mb-1">رمز عبور:</label>
-                                <input type="number" name="mobile"
+                                <input type="number" inputmode="numeric"
+                                       pattern="[0-9]*"  name="mobile"
                                        class="form-control" required placeholder="شماره موبایل">
                                 @error('mobile') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
                             </div>

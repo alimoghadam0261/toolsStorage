@@ -24,6 +24,8 @@ class RoleMiddleware
                 'admin.users.destroy',
                 'admin.users.restore',
                 'admin.users.forceDelete',
+                'admin.info.UserActivityDashboard',
+                'admin.info.Toolscharts',
             ];
 
             if (in_array($request->route()->getName(), $blockedRoutes)) {

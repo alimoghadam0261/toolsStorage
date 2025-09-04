@@ -3,32 +3,57 @@
 namespace App\Livewire\Admin;
 
 use App\Models\ToolsDetail;
-use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
+use Morilog\Jalali\Jalalian;
 
 class Dashboard extends Component
 {
     public $countJam;
+    public $countabzar;
+    public $countmasraf;
     public $countTools;
+    public $countTotal;
     public $lowTools;
+    public $chartData;
+    public $lineChartData;
 
     public function mount()
     {
-        // 📌 کش کردن داده‌ها
-        $this->lowTools = Cache::remember('dashboard_lowTools', now()->addMinutes(5), function () {
-            return ToolsDetail::select(['id', 'count', 'tools_information_id'])
-                ->with(['information:id,name']) // فقط ستون‌های لازم
-                ->where('count', '<', 10)
-                ->get();
+        // داده‌های برای نمودار میله‌ای (بر اساس ماه‌های شمسی)
+        $this->chartData = ToolsDetail::selectRaw('category, COUNT(*) as count, MONTH(created_at) as month, YEAR(created_at) as year')
+            ->groupBy('category', 'month', 'year')
+            ->get();
+
+        // تبدیل تاریخ میلادی به تاریخ شمسی برای هر ماه
+        $this->chartData->transform(function($item) {
+            $item->month = Jalalian::fromDateTime($item->created_at)->getMonth(); // ماه شمسی
+            return $item;
         });
 
-        $this->countJam = Cache::remember('dashboard_countJam', now()->addMinutes(5), function () {
-            return ToolsDetail::where('category', 'IPR-')->count();
+        // داده‌های برای نمودار خطی (بر اساس ماه‌های شمسی)
+        $this->lineChartData = ToolsDetail::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->groupBy('month')
+            ->get();
+
+        // تبدیل تاریخ میلادی به تاریخ شمسی برای نمودار خطی
+        $this->lineChartData->transform(function($item) {
+            $item->month = Jalalian::fromDateTime($item->created_at)->getMonth(); // ماه شمسی
+            return $item;
         });
 
-        $this->countTools = Cache::remember('dashboard_countTools', now()->addMinutes(5), function () {
-            return ToolsDetail::where('category', 'tools')->count();
-        });
+        // کش کردن داده‌ها
+        $this->lowTools = ToolsDetail::select(['id', 'count', 'tools_information_id'])
+            ->with(['information:id,name'])
+            ->where('count', '<', 10)
+            ->get();
+
+        $this->countJam = ToolsDetail::where('category', 'IPR-')->count();
+        $this->countabzar = ToolsDetail::where('category', 'abzar-')->count();
+        $this->countmasraf = ToolsDetail::where('category', '!=', 'IPR-')
+            ->where('category', '!=', 'abzar-')
+            ->count();
+        $this->countTools = ToolsDetail::where('category', 'tools')->count();
+        $this->countTotal = ToolsDetail::count();
     }
 
     public function render()
