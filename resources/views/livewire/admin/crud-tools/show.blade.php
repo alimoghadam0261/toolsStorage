@@ -112,7 +112,7 @@
             </div>
 
             <div class="col-md-2">
-{{--                @livewire('component.admin.sidebar')--}}
+                @livewire('component.admin.sidebar')
             </div>
         </div>
     </div>

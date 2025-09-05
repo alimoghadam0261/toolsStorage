@@ -1,6 +1,3 @@
-
-
-
 <div class="dashboard-admin">
     <div class="container-fluid">
         <div class="row">
@@ -55,6 +52,10 @@
                             @endforelse
                             </tbody>
                         </table>
+                        <div class="mt-3">
+
+                            {{ $activities->links() }}
+                        </div>
                     </div>
 
                     {{-- لاگ ابزارها --}}
@@ -131,13 +132,9 @@
 
 
                     <div class="mt-3">
-                        {{-- صفحه بندی کاربران --}}
-                        {{ $activities->links() }}
-                        {{-- صفحه بندی ابزارها --}}
                         {{ $toolActivities->links() }}
                     </div>
                 </div>
-
 
 
             </div>

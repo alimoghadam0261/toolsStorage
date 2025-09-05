@@ -9,18 +9,21 @@
                   <div class="widgets-admin">
 
                     <div class="box-widget-admin">
+                        <br>
                         <a href="{{route('admin.info.UserActivityDashboard')}}">
                         <h6>گزارشات پرسنل </h6>
                         </a>
                     </div>
                     <div class="box-widget-admin">
+                        <br>
                         <a href="{{route('admin.info.Toolscharts')}}">
                         <h6>گزارشات ابزار ها </h6>
                         </a>
                     </div>
                     <div class="box-widget-admin">
-                        <h6>مجموع جم خارج از انبار</h6>
-                        <p>1234</p>
+                        <br>
+                        <h6>گزارشات انبار ها </h6>
+
                     </div>
                 </div>
 

@@ -7,6 +7,7 @@ use App\Models\UserActivity;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Morilog\Jalali\Jalalian;
 use Carbon\Carbon;
 
@@ -71,47 +72,58 @@ class Tools extends Component
         return redirect()->route('admin.tools.show', $id);
     }
 
+    private function getCacheKey(): string
+    {
+        // اضافه کردن صفحه به کش
+        $page = $this->page ?? 1; // page از trait WithPagination
+        return 'tools_' . md5(
+                $this->searchTerm . '|' .
+                $this->date_from . '|' .
+                $this->date_to . '|' .
+                $this->sortBy . '|' .
+                $this->sortDirection . '|' .
+                $page
+            );
+    }
+
     public function loadToolsQuery()
     {
-        $query = ToolsInformation::with('details');
+        $cacheKey = $this->getCacheKey();
 
-        // فیلتر جستجو
-        if ($this->searchTerm) {
-            $query->where(function ($q) {
-                $q->where('name', 'like', '%' . $this->searchTerm . '%')
-                    ->orWhere('serialNumber', 'like', '%' . $this->searchTerm . '%');
-            });
-        }
+        return Cache::remember($cacheKey, now()->addMinutes(5), function () {
+            $query = ToolsInformation::with('details');
 
-        // فیلتر تاریخ شمسی
-        if ($this->date_from) {
-            $from = $this->parseJalaliToCarbonOrNull($this->date_from);
-            if ($from) {
-                $query->whereDate('created_at', '>=', $from->startOfDay());
+            if ($this->searchTerm) {
+                $query->where(function ($q) {
+                    $q->where('name', 'like', '%' . $this->searchTerm . '%')
+                        ->orWhere('serialNumber', 'like', '%' . $this->searchTerm . '%');
+                });
             }
-        }
 
-        if ($this->date_to) {
-            $to = $this->parseJalaliToCarbonOrNull($this->date_to);
-            if ($to) {
-                $query->whereDate('created_at', '<=', $to->endOfDay());
+            if ($this->date_from) {
+                $from = $this->parseJalaliToCarbonOrNull($this->date_from);
+                if ($from) $query->whereDate('created_at', '>=', $from->startOfDay());
             }
-        }
 
-        // مرتب‌سازی
-        if ($this->sortBy === 'price') {
-            $query->select('toolsinformations.*')
-                ->join('toolsdetailes', 'toolsinformations.id', '=', 'toolsdetailes.tools_information_id')
-                ->orderByRaw('CAST(toolsdetailes.price AS UNSIGNED) ' . $this->sortDirection);
-        } elseif ($this->sortBy === 'count') {
-            $query->select('toolsinformations.*')
-                ->join('toolsdetailes', 'toolsinformations.id', '=', 'toolsdetailes.tools_information_id')
-                ->orderBy('toolsdetailes.count', $this->sortDirection);
-        } else {
-            $query->orderBy($this->sortBy, $this->sortDirection);
-        }
+            if ($this->date_to) {
+                $to = $this->parseJalaliToCarbonOrNull($this->date_to);
+                if ($to) $query->whereDate('created_at', '<=', $to->endOfDay());
+            }
 
-        return $query;
+            if ($this->sortBy === 'price') {
+                $query->select('toolsinformations.*')
+                    ->join('toolsdetailes', 'toolsinformations.id', '=', 'toolsdetailes.tools_information_id')
+                    ->orderByRaw('CAST(toolsdetailes.price AS UNSIGNED) ' . $this->sortDirection);
+            } elseif ($this->sortBy === 'count') {
+                $query->select('toolsinformations.*')
+                    ->join('toolsdetailes', 'toolsinformations.id', '=', 'toolsdetailes.tools_information_id')
+                    ->orderBy('toolsdetailes.count', $this->sortDirection);
+            } else {
+                $query->orderBy($this->sortBy, $this->sortDirection);
+            }
+
+            return $query->paginate(20);
+        });
     }
 
     public function export()
@@ -131,9 +143,7 @@ class Tools extends Component
             'format'    => $this->exportFormat,
         ], fn($v) => $v !== null && $v !== '');
 
-        $url = route('admin.tools.export', $params);
-
-        return redirect()->to($url);
+        return redirect()->to(route('admin.tools.export', $params));
     }
 
     private function faDigitsToEn(?string $value): ?string
@@ -165,7 +175,7 @@ class Tools extends Component
 
     public function render()
     {
-        $tools = $this->loadToolsQuery()->paginate(20);
+        $tools = $this->loadToolsQuery();
         $count = $tools->total();
 
         return view('livewire.admin.tools', compact('tools', 'count'));

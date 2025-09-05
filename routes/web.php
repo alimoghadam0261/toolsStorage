@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ToolsExportController;
 
-
-
+Route::fallback(function () {
+    return view('livewire.errors.not-found');
+});
 
 
 
@@ -76,4 +78,6 @@ Route::middleware(['auth', 'role:admin,author'])->prefix('admin')->group(functio
 //    Route::get('/export', App\Livewire\Component\Export::class)->name('admin.export');
     Route::get('/admin/tools/export', [ToolsExportController::class, 'export'])
         ->name('admin.tools.export');
+
+
 });
