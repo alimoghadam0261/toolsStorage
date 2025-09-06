@@ -36,10 +36,10 @@ return new class extends Migration
             $table->string('attach')->nullable();
             $table->string('status');
 
-            $table->unsignedInteger('qty_total')->default(0);
-            $table->unsignedInteger('qty_in_use')->default(0);
-            $table->unsignedInteger('qty_damaged')->default(0);
-            $table->unsignedInteger('qty_lost')->default(0);
+            $table->string('qtyTotal')->default(0);
+            $table->string('qtyWritOff')->default(0);
+            $table->string('qtyDamaged')->default(0);
+            $table->string('qtyLost')->default(0);
 
             // اصلاح شد
             $table->unique(['tools_information_id', 'storage_id'], 'ux_tool_storage');

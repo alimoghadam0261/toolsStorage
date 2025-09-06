@@ -4,7 +4,6 @@ namespace App\Livewire\Admin\Transfer;
 
 use App\Models\Transfer;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 class Index extends Component
@@ -15,9 +14,6 @@ class Index extends Component
         $transfer = Transfer::findOrFail($id);
         $transfer->delete(); // Soft Delete
 
-        // پاک کردن کش پس از حذف
-        Cache::forget($this->getCacheKey());
-
         session()->flash('success', 'انتقال با موفقیت حذف شد (نرم‌حذف) ✅');
     }
 
@@ -26,32 +22,21 @@ class Index extends Component
         return redirect()->route('admin.transfer.show', $id);
     }
 
-    // تولید کلید کش دینامیک بر اساس نقش کاربر
-    private function getCacheKey(): string
-    {
-        $user = Auth::user();
-        return 'transfers_' . ($user->role === 'admin' ? 'all' : 'user_' . $user->id);
-    }
-
     public function render()
     {
-        $cacheKey = $this->getCacheKey();
+        $user = Auth::user();
 
-        $transfers = Cache::remember($cacheKey, now()->addMinutes(5), function () {
-            $user = Auth::user();
+        $transfers = Transfer::with(['fromStorage', 'toStorage', 'items.toolDetail.information'])
+            ->latest();
 
-            $query = Transfer::with(['fromStorage', 'toStorage', 'items.toolDetail.information'])
-                ->latest();
+        if ($user->role !== 'admin') {
+            $transfers->where(function ($q) use ($user) {
+                $q->where('from_storage_id', $user->storage_id)
+                    ->orWhere('to_storage_id', $user->storage_id);
+            });
+        }
 
-            if ($user->role !== 'admin') {
-                $query->where(function ($q) use ($user) {
-                    $q->where('from_storage_id', $user->storage_id)
-                        ->orWhere('to_storage_id', $user->storage_id);
-                });
-            }
-
-            return $query->get();
-        });
+        $transfers = $transfers->get();
 
         return view('livewire.admin.transfer.index', [
             'transfers' => $transfers,

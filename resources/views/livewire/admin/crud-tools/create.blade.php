@@ -194,6 +194,29 @@
                                 @error('dateOfexp') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
+
+                            <div class="col-md-3 mb-2">
+                                <label class="form-label">تعداد اسقاطی</label>
+                                <input required type="number" placeholder="در ثبت اولیه این مقدار را 0 بزارید یا عددی ننویسید"
+                                       class="form-control @error('qtyWritOff') is-invalid @enderror"
+                                       wire:model="qtyWritOff">
+                                @error('qtyWritOff') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label class="form-label">تعداد خرابی</label>
+                                <input required type="number" placeholder="در ثبت اولیه این مقدار را 0 بزارید یا عددی ننویسید"
+                                       class="form-control @error('qtyDamaged') is-invalid @enderror"
+                                       wire:model="qtyDamaged">
+                                @error('qtyDamaged') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label class="form-label">تعداد گمشده</label>
+                                <input required type="number" placeholder="در ثبت اولیه این مقدار را 0 بزارید یا عددی ننویسید"
+                                       class="form-control @error('qtyLost') is-invalid @enderror"
+                                       wire:model="qtyLost">
+                                @error('qtyLost') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+
                             <div class="col-6 mb-2">
                                 <label class="form-label">توضیحات</label>
                                 <textarea class="form-control @error('content') is-invalid @enderror"

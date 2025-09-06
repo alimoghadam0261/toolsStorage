@@ -37,7 +37,7 @@
                             </div>
                             <div class="col-md-3 mb-2">
                                 <label>تعداد</label>
-                                <input required type="text" class="form-control" wire:model="count">
+                                <input required type="number" class="form-control" wire:model="count">
                             </div>
                             <div class="col-md-3 mb-2">
                                 <label>مدل</label>
@@ -93,6 +93,21 @@
                             <div class="col-md-3 mb-2">
                                 <label>تاریخ انقضا</label>
                                 <input  type="date" class="form-control" wire:model="dateOfexp">
+                            </div>
+
+                            <div class="col-md-3 mb-2">
+                                <label>تعداد خرابی</label>
+                                <input required type="number" class="form-control" wire:model="qtyDamaged">
+                            </div>
+
+                            <div class="col-md-3 mb-2">
+                                <label>تعداد گمشده</label>
+                                <input required type="number" class="form-control" wire:model="qtyLost">
+                            </div>
+
+                            <div class="col-md-3 mb-2">
+                                <label>تعداد اسقاطی</label>
+                                <input required type="number" class="form-control" wire:model="qtyWritOff">
                             </div>
 
 

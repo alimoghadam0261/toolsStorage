@@ -28,6 +28,7 @@ class Show extends Component
 
     public function render()
     {
+        // گرفتن ابزارهایی که به انبار مقصد منتقل شده‌اند
         $locations = ToolsLocation::with(['tool.details'])
             ->where('location', $this->storages->name)
             ->whereHas('tool', function ($q) {
@@ -37,7 +38,8 @@ class Show extends Component
             ->paginate(20);
 
         return view('livewire.admin.crud-storage.show', [
-            'locations' => $locations
+            'locations' => $locations,
         ]);
     }
+
 }

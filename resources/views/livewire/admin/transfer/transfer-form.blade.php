@@ -75,7 +75,7 @@
                                 <option value="">-- انتخاب کنید --</option>
                                 @foreach($tools as $tool)
                                     <option value="{{ $tool->id }}">
-                                        {{ $tool->information->name }} (موجودی: {{ $tool->count }})
+                                        {{ $tool->information->name ?? '' }} (موجودی: {{ $tool->count }})
                                     </option>
                                 @endforeach
                             </select>

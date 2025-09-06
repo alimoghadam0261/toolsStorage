@@ -11,6 +11,7 @@ class Dashboard extends Component
     public $countJam;
     public $countabzar;
     public $countmasraf;
+
     public $countTools;
     public $countTotal;
     public $lowTools;
@@ -41,11 +42,12 @@ class Dashboard extends Component
             return $item;
         });
 
-        // کش کردن داده‌ها
-        $this->lowTools = ToolsDetail::select(['id', 'count', 'tools_information_id'])
-            ->with(['information:id,name'])
-            ->where('count', '<', 10)
-            ->get();
+        // حذف کش
+
+        $this->lowTools = ToolsDetail::with(['information:id,name'])
+            ->where('count', '<', 10) // اطمینان از اینکه فقط ابزارهای با موجودی کمتر از ۱۰ گرفته می‌شوند
+            ->get(['id', 'tools_information_id', 'count']);
+
 
         $this->countJam = ToolsDetail::where('category', 'IPR-')->count();
         $this->countabzar = ToolsDetail::where('category', 'abzar-')->count();

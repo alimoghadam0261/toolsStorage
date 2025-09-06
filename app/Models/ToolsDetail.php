@@ -14,6 +14,7 @@ class ToolsDetail extends Model
     protected $casts = [
         'dateOfSale' => 'date',
         'dateOfexp'  => 'date',
+
     ];
 
     protected $fillable = [
@@ -22,8 +23,7 @@ class ToolsDetail extends Model
         'attach','status','size','price','StorageLocation','color','dateOfSale',
         'dateOfexp','content','Receiver','storage_id','companynumber',
 
-        // فیلدهای جدید مدیریت موجودی
-        'qty_total','qty_in_use','qty_damaged','qty_lost',
+        'qtyTotal','qtyWritOff','qtyDamaged','qtyLost',
     ];
 
     // ارتباط با جدول اطلاعات کلی ابزار

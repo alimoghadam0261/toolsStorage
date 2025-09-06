@@ -24,7 +24,7 @@ class Create extends Component
     public $customPrefix;
     public $toolActivities;
 
-    public $name, $serialNumber, $companynumber;
+    public $name, $serialNumber, $companynumber,$qtyWritOff,$qtyDamaged,$qtyTotal,$qtyLost;
     public $category, $count, $model, $Weight, $TypeOfConsumption,
         $size, $price, $color, $dateOfSale, $dateOfexp, $Receiver,
         $content, $attach, $status;
@@ -224,6 +224,10 @@ class Create extends Component
             'dateOfexp'        => $expCarbon->format('Y-m-d'),
             'content'          => $this->content,
             'attach'           => $fileName,
+            'qtyTotal'           =>  $this->count,
+            'qtyWritOff'           => 0,
+            'qtyDamaged'           => 0,
+            'qtyLost'           => 0,
         ]);
 
         // ایجاد اولین لوکیشن

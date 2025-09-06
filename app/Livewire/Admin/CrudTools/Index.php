@@ -12,18 +12,31 @@ class Index extends Component
     use LogsActivity;
 
     public $toolId;
-    public $name, $serialNumber, $count, $model, $Weight, $TypeOfConsumption,
+    public $name, $serialNumber, $count, $model, $Weight, $TypeOfConsumption,$qtyLost,$qtyDamaged,$qtyWritOff,$qtyTotal,
         $size, $price, $StorageLocation, $color, $status, $companynumber,
         $dateOfSale, $dateOfexp, $category, $content, $Receiver;
 
     public $storages = [];
 
+
+
     public function mount($id)
     {
+        $qtyrez =$this->qtyDamaged+$this->qtyWritOff+$this->qtyLost;
+        $qtyrez1 = $this->count-$qtyrez;
+
+
+
         $tool = ToolsInformation::with('details')->findOrFail($id);
 
         $this->toolId = $tool->id;
         $this->name = $tool->name;
+
+        $this->qtyLost = $tool->details->qtyLost;
+        $this->qtyWritOff = $tool->details->qtyWritOff;
+        $this->qtyDamaged = $tool->details->qtyDamaged;
+        $this->qtyTotal = $qtyrez1;
+
         $this->companynumber = $tool->companynumber;
         $this->serialNumber = $tool->serialNumber;
         $this->count = $tool->details->count;
@@ -44,7 +57,7 @@ class Index extends Component
         $this->storages = Storage::select('id', 'name')->get();
     }
 
-    
+
 
     public function updateTool()
     {
@@ -58,6 +71,12 @@ class Index extends Component
             'name' => $this->name,
             'serialNumber' => $this->serialNumber,
         ]);
+
+
+        $qtyrez =$this->qtyDamaged+$this->qtyWritOff+$this->qtyLost;
+        $qtyrez1 = $this->count-$qtyrez;
+
+
 
         // بروزرسانی جزئیات ابزار
         $info->details()->update([
@@ -73,6 +92,10 @@ class Index extends Component
             'StorageLocation' => $this->StorageLocation,
             'Receiver' => $this->Receiver,
             'color' => $this->color,
+            'qtyLost' => $this->qtyLost,
+        'qtyWritOff' => $this->qtyWritOff,
+        'qtyDamaged' => $this->qtyDamaged,
+//       ' qtyTotal' => $qtyrez1,
 //            'dateOfSale' => $this->dateOfSale,
 //            'dateOfexp' => $this->dateOfexp,
             'content' => $this->content,

@@ -6,6 +6,7 @@ use App\Models\Storage;
 use App\Models\ToolsDetail;
 use App\Models\Transfer;
 use App\Models\Transfer_items;
+use App\Models\ToolsLocation; // اضافه کردن این خط برای دسترسی به مدل ToolsLocation
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -76,6 +77,7 @@ class TransferForm extends Component
         DB::transaction(function () {
             $number = 'TR-' . now()->format('Ymd') . random_int(10000, 99999);
 
+            // ایجاد رکورد انتقال
             $transfer = Transfer::create([
                 'from_storage_id' => $this->fromStorage,
                 'to_storage_id'   => $this->toStorage,
@@ -84,6 +86,12 @@ class TransferForm extends Component
                 'note'            => $this->note,
                 'user_id'         => auth()->id(),
             ]);
+
+            // تعیین مسیر ذخیره‌سازی تصویر اگر وجود داشته باشد
+            $imagePath = null;
+            if ($this->image) {
+                $imagePath = $this->image->store('transfer', 'public'); // ذخیره تصویر و دریافت مسیر آن
+            }
 
             foreach ($this->transferItems as $item) {
                 $fromTool = ToolsDetail::where('storage_id', $this->fromStorage)
@@ -98,8 +106,10 @@ class TransferForm extends Component
                     throw new \Exception("موجودی ابزار کافی نیست.");
                 }
 
+                // کاهش موجودی ابزار از انبار مبدا
                 $fromTool->decrement('count', $item['qty']);
 
+                // افزایش موجودی در انبار مقصد
                 $toTool = ToolsDetail::firstOrCreate(
                     [
                         'tools_information_id' => $fromTool->tools_information_id,
@@ -125,13 +135,20 @@ class TransferForm extends Component
                     ]
                 );
 
+                // افزایش موجودی ابزار در انبار مقصد
                 $toTool->increment('count', $item['qty']);
 
-                $imagePath = null;
-                if ($this->image) {
-                    $imagePath = $this->image->store('transfer', 'public');
-                }
+                // ثبت اطلاعات انتقال ابزار در ToolsLocation
+                ToolsLocation::create([
+                    'tool_id'             => $fromTool->id,
+                    'tools_information_id'=> $fromTool->tools_information_id, // اضافه کردن tools_information_id
+                    'location'            => optional(Storage::find($this->toStorage))->name,
+                    'moved_at'            => now(),
+                    'Receiver'            => $fromTool->Receiver,
+                    'status'              => $fromTool->status,
+                ]);
 
+                // ثبت اطلاعات انتقال ابزار در Transfer_items
                 Transfer_items::create([
                     'transfer_id'        => $transfer->id,
                     'toolsinformation_id'=> $fromTool->tools_information_id,
