@@ -45,8 +45,9 @@ class Dashboard extends Component
         // حذف کش
 
         $this->lowTools = ToolsDetail::with(['information:id,name'])
-            ->where('count', '<', 10) // اطمینان از اینکه فقط ابزارهای با موجودی کمتر از ۱۰ گرفته می‌شوند
-            ->get(['id', 'tools_information_id', 'count']);
+            ->where('count', '<', 10) // ابزارهایی با موجودی کمتر از ۱۰
+            ->where('category', 'NOT LIKE', 'IPR-%') // حذف ابزارهایی که شماره سریال‌شون با IPR- شروع میشه
+            ->get(['id', 'tools_information_id', 'count', 'category']);
 
 
         $this->countJam = ToolsDetail::where('category', 'IPR-')->count();

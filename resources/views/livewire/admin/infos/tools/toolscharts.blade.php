@@ -68,7 +68,7 @@
                 <!-- جدول خرابی‌ها -->
                 <div class="row">
                     <div class="col-md-6">
-                        <h4>تعداد خرابی‌ها</h4>
+                        <h4>تعداد خرابی‌های سایت ها</h4>
                         <div class="table-container" style="height: 400px; overflow-y: auto; ">
                         <table class="table table-striped">
                             <thead class=" table table-dark">
@@ -100,7 +100,7 @@
 
                     <!-- جدول گمشده‌ها -->
                     <div class="col-md-6">
-                        <h4>تعداد گمشده‌ها</h4>
+                        <h4>تعداد گمشده‌های سایت ها</h4>
                         <div class="table-container" style="height: 400px; overflow-y: auto;">
                         <table class="table table-striped">
                             <thead class=" table table-dark">

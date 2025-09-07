@@ -12,21 +12,21 @@ class Index extends Component
     use LogsActivity;
 
     public $toolId;
-    public $name, $serialNumber, $count, $model, $Weight, $TypeOfConsumption,$qtyLost,$qtyDamaged,$qtyWritOff,$qtyTotal,
+    public $name, $serialNumber, $count, $model, $Weight, $TypeOfConsumption, $qtyLost, $qtyDamaged, $qtyWritOff, $qtyTotal,
         $size, $price, $StorageLocation, $color, $status, $companynumber,
         $dateOfSale, $dateOfexp, $category, $content, $Receiver;
 
     public $storages = [];
 
-
-
     public function mount($id)
     {
-        $qtyrez =$this->qtyDamaged+$this->qtyWritOff+$this->qtyLost;
-        $qtyrez1 = $this->count-$qtyrez;
+        // محاسبه مجموع مقادیر گمشده، خراب و اسقاطی
+        $qtyrez = $this->qtyDamaged + $this->qtyWritOff + $this->qtyLost;
+        $qtyrez1 = $this->count - $qtyrez;
+        $this->qtyTotal = $qtyrez1;
+        $this->count = $this->qtyTotal;  // count را به مقدار qtyTotal برابر می‌کنیم
 
-
-
+        // بارگذاری اطلاعات ابزار
         $tool = ToolsInformation::with('details')->findOrFail($id);
 
         $this->toolId = $tool->id;
@@ -35,7 +35,8 @@ class Index extends Component
         $this->qtyLost = $tool->details->qtyLost;
         $this->qtyWritOff = $tool->details->qtyWritOff;
         $this->qtyDamaged = $tool->details->qtyDamaged;
-        $this->qtyTotal = $qtyrez1;
+        $this->qtyTotal = $qtyrez1; // بروزرسانی qtyTotal
+        $this->count = $this->qtyTotal; // به روزرسانی count
 
         $this->companynumber = $tool->companynumber;
         $this->serialNumber = $tool->serialNumber;
@@ -57,8 +58,6 @@ class Index extends Component
         $this->storages = Storage::select('id', 'name')->get();
     }
 
-
-
     public function updateTool()
     {
         $info = ToolsInformation::findOrFail($this->toolId);
@@ -66,22 +65,22 @@ class Index extends Component
         // آپدیت محل و ثبت لاگ انتقال
         $this->updateLocation($this->toolId, $this->StorageLocation);
 
+        // محاسبه مجدد qtyTotal و همسان‌سازی count با آن
+        $qtyrez = $this->qtyDamaged + $this->qtyWritOff + $this->qtyLost;
+        $qtyrez1 = $this->count - $qtyrez;
+        $this->qtyTotal = $qtyrez1;
+        $this->count = $this->qtyTotal; // count را به مقدار qtyTotal برابر می‌کنیم
+
         // بروزرسانی اطلاعات اصلی ابزار
         $info->update([
             'name' => $this->name,
             'serialNumber' => $this->serialNumber,
         ]);
 
-
-        $qtyrez =$this->qtyDamaged+$this->qtyWritOff+$this->qtyLost;
-        $qtyrez1 = $this->count-$qtyrez;
-
-
-
         // بروزرسانی جزئیات ابزار
         $info->details()->update([
             'category' => $this->category,
-            'count' => $this->count,
+            'count' => $this->count, // به‌روزرسانی count
             'companynumber' => $this->companynumber,
             'status' => $this->status,
             'model' => $this->model,
@@ -93,11 +92,8 @@ class Index extends Component
             'Receiver' => $this->Receiver,
             'color' => $this->color,
             'qtyLost' => $this->qtyLost,
-        'qtyWritOff' => $this->qtyWritOff,
-        'qtyDamaged' => $this->qtyDamaged,
-//       ' qtyTotal' => $qtyrez1,
-//            'dateOfSale' => $this->dateOfSale,
-//            'dateOfexp' => $this->dateOfexp,
+            'qtyWritOff' => $this->qtyWritOff,
+            'qtyDamaged' => $this->qtyDamaged,
             'content' => $this->content,
         ]);
 

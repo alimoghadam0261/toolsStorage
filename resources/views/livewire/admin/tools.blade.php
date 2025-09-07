@@ -126,15 +126,24 @@
                                 @foreach($tools as $index => $tool)
 
                                     @php
-                                        $toolCount = $tool->details->count ?? 0; // اگر details تهی بود میشه 0
+                                        // جمع تعداد واقعی ابزارها از جزئیات
+                                        $toolCount = $tool->details->count ?? 0;
+
+                                        // بررسی اینکه شماره سریال با IPR- شروع می‌شود
+                                        $isIPR = str_starts_with($tool->serialNumber, 'IPR-');
+
                                         $bgColor = '';
-                                        if($toolCount < 10) {
-                                            $bgColor = 'background:red;
-                                              animation: 2s alarm linear infinite;';
-                                        } elseif($toolCount < 20) {
-                                            $bgColor = 'background:#f4f474;';
+
+                                        // اگر ابزار با IPR- شروع نشود، شرط رنگ‌بندی اعمال شود
+                                        if (!$isIPR) {
+                                            if ($toolCount < 10) {
+                                                $bgColor = 'background:red; animation: 2s alarm linear infinite;';
+                                            } elseif ($toolCount < 20) {
+                                                $bgColor = 'background:#f4f474;';
+                                            }
                                         }
                                     @endphp
+
 
 
                                     <tr style="cursor:pointer;" wire:click="goToShow({{ $tool->id }})">
