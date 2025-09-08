@@ -42,12 +42,13 @@ class Dashboard extends Component
             return $item;
         });
 
-        // حذف کش
 
-        $this->lowTools = ToolsDetail::with(['information:id,name'])
-            ->where('count', '<', 10) // ابزارهایی با موجودی کمتر از ۱۰
-            ->where('category', 'NOT LIKE', 'IPR-%') // حذف ابزارهایی که شماره سریال‌شون با IPR- شروع میشه
-            ->get(['id', 'tools_information_id', 'count', 'category']);
+        $this->lowTools = ToolsDetail::with(['information:id,name,serialNumber'])
+            ->where('count', '<', 10)
+            ->whereHas('information', function($query) {
+                $query->where('serialNumber', 'NOT LIKE', 'IPR-%');
+            })
+            ->get(['id', 'count', 'tools_information_id']);
 
 
         $this->countJam = ToolsDetail::where('category', 'IPR-')->count();
