@@ -65,6 +65,10 @@
                                     <span><strong>وضعیت:</strong></span><br><span>{{$tool->details->status}}</span>
                                 </div>
                                 <div class="box-show-detail">
+                                    <span><strong>توصیخات:</strong></span><br><span>{{$tool->details->content}}</span>
+                                </div>
+
+                                <div class="box-show-detail">
                                     <span><strong>تاریخ تولید:</strong></span><br><span>{{ jDate($tool->details->dateOfSale)->format('Y/m/d') }}</span>
                                 </div>
                                 <div class="box-show-detail">

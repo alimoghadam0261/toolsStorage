@@ -38,7 +38,7 @@ class Index extends Component
         $this->qtyTotal = $qtyrez1; // بروزرسانی qtyTotal
         $this->count = $this->qtyTotal; // به روزرسانی count
 
-        $this->companynumber = $tool->companynumber;
+        $this->companynumber = $tool->details->companynumber;
         $this->serialNumber = $tool->serialNumber;
         $this->count = $tool->details->count;
         $this->status = $tool->details->status;
