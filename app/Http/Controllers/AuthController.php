@@ -24,7 +24,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name'       => ['required', 'string', 'min:3', 'max:15'],
+            'name'       => ['required', 'string', 'min:3', 'max:25'],
             'mobile'     => ['required', 'numeric', 'regex:/^0\d{10}$/', 'unique:users'],
             'cardNumber' => ['required', 'string', 'min:3', 'max:6', 'unique:users'],
             'department' => ['required'],

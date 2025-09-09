@@ -22,6 +22,7 @@ class User extends Authenticatable
         'cardNumber',
         'mobile',
         'department',
+        'storage'
     ];
 
 
