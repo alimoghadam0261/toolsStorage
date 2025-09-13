@@ -56,7 +56,10 @@
                                     <span><strong>وزن:</strong></span><br><span>{{$tool->details->Weight}}</span>
                                 </div>
                                 <div class="box-show-detail">
-                                    <span><strong>موارد مصزفی:</strong></span><br><span>{{$tool->details->TypeOfConsumption}}</span>
+                                    <span><strong>مدل:</strong></span><br><span>{{$tool->details->model}}</span>
+                                </div>
+                                <div class="box-show-detail">
+                                    <span><strong>موارد مصرفی:</strong></span><br><span>{{$tool->details->TypeOfConsumption}}</span>
                                 </div>
                                 <div class="box-show-detail">
                                     <span><strong>لوکیشن:</strong></span><br><span>{{$tool->details->StorageLocation}}</span>
