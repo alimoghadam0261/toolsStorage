@@ -16,13 +16,31 @@
                                 <input required type="text"  class="form-control" wire:model="name">
                             </div>
                             <div class="col-md-3 mb-2">
-                                <label>دسته بندی:</label>
-                                <select  class="form-select" name="category" wire:model.live="category" id="">
-                                    <option value="" selected>انتخاب کنید</option>
-                                    <option value="tools" >مصرفی</option>
-                                    <option value="jam" >سرمایه ای</option>
+                                <label class="form-label">دسته بندی:</label>
+                                <select required class="form-select @error('category') is-invalid @enderror"
+                                        wire:model.live="category">
+                                    <option value="">انتخاب کنید</option>
+                                    <option value="tools">مصرفی</option>
+                                    <option value="abzar-">ابزار</option>
+                                    <option value="IPR-">سرمایه ای</option>
                                 </select>
+                                @error('category') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
+
+                            {{-- فقط وقتی دسته‌بندی IPR- نیست، این سلکت نمایش داده بشه --}}
+                            @if($category && $category !== 'IPR-'&& $category !==  'abzar-')
+                                <div class="col-md-3 mb-2">
+                                    <label class="form-label">پیشوند اختصاصی</label>
+                                    <select class="form-select @error('customPrefix') is-invalid @enderror"
+                                            wire:model.live="customPrefix">
+                                        <option value="">انتخاب کنید</option>
+                                        <option value="200">200</option>
+                                        <option value="300">300</option>
+                                        <option value="400">400</option>
+                                    </select>
+                                    @error('customPrefix') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                </div>
+                            @endif
                             <div class="col-md-3 mb-2">
                                 <label>شماره سریال</label>
                                 <input readonly type="text" class="form-control" wire:model="serialNumber">
@@ -44,14 +62,32 @@
                                 <input  type="text" class="form-control" wire:model="model">
                             </div>
                             <div class="col-md-3 mb-2">
-                                <label>وضعیت</label>
-                                <select required class="form-select" wire:model="status">
+                                <label class="form-label">دسته بندی:</label>
+                                <select required class="form-select @error('category') is-invalid @enderror"
+                                        wire:model.live="category">
                                     <option value="">انتخاب کنید</option>
-                                    <option value="active">فعال</option>
-                                    <option value="inactive">غیرفعال</option>
-                                    <option value="broken">خراب</option>
+                                    <option value="tools">مصرفی</option>
+                                    <option value="abzar-">ابزار</option>
+                                    <option value="IPR-">سرمایه ای</option>
                                 </select>
+                                @error('category') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
+
+                            {{-- فقط وقتی دسته‌بندی IPR- نیست، این سلکت نمایش داده بشه --}}
+                            @if($category && $category !== 'IPR-'&& $category !==  'abzar-')
+                                <div class="col-md-3 mb-2">
+                                    <label class="form-label">پیشوند اختصاصی</label>
+                                    <select class="form-select @error('customPrefix') is-invalid @enderror"
+                                            wire:model.live="customPrefix">
+                                        <option value="">انتخاب کنید</option>
+                                        <option value="200">200</option>
+                                        <option value="300">300</option>
+                                        <option value="400">400</option>
+                                    </select>
+                                    @error('customPrefix') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                </div>
+                            @endif
+
 
                             <div class="col-md-3 mb-2">
                                 <label>وزن</label>

@@ -6,6 +6,7 @@ use App\Models\ToolsInformation;
 use Livewire\Component;
 use App\Models\Storage;
 use App\LogsActivity; // Trait ثبت لاگ
+use Illuminate\Support\Facades\DB;
 
 class Index extends Component
 {
@@ -17,30 +18,27 @@ class Index extends Component
         $dateOfSale, $dateOfexp, $category, $content, $Receiver;
 
     public $storages = [];
+    public $customPrefix;
 
     public function mount($id)
     {
-        // محاسبه مجموع مقادیر گمشده، خراب و اسقاطی
-        $qtyrez = $this->qtyDamaged + $this->qtyWritOff + $this->qtyLost;
-        $qtyrez1 = $this->count - $qtyrez;
-        $this->qtyTotal = $qtyrez1;
-        $this->count = $this->qtyTotal;  // count را به مقدار qtyTotal برابر می‌کنیم
-
-        // بارگذاری اطلاعات ابزار
         $tool = ToolsInformation::with('details')->findOrFail($id);
 
         $this->toolId = $tool->id;
         $this->name = $tool->name;
+        $this->serialNumber = $tool->serialNumber;
 
         $this->qtyLost = $tool->details->qtyLost;
         $this->qtyWritOff = $tool->details->qtyWritOff;
         $this->qtyDamaged = $tool->details->qtyDamaged;
-        $this->qtyTotal = $qtyrez1; // بروزرسانی qtyTotal
-        $this->count = $this->qtyTotal; // به روزرسانی count
+
+        $this->count = $tool->details->count;
+
+        // محاسبه qtyTotal
+        $this->qtyTotal = $this->count - ($this->qtyLost + $this->qtyWritOff + $this->qtyDamaged);
+        $this->count = $this->qtyTotal;
 
         $this->companynumber = $tool->details->companynumber;
-        $this->serialNumber = $tool->serialNumber;
-        $this->count = $tool->details->count;
         $this->status = $tool->details->status;
         $this->model = $tool->details->model;
         $this->Receiver = $tool->details->Receiver;
@@ -58,20 +56,65 @@ class Index extends Component
         $this->storages = Storage::select('id', 'name')->get();
     }
 
+    /**
+     * وقتی Category تغییر کرد، شماره سریال جدید بساز
+     */
+    public function updatedCategory($value)
+    {
+        if (!empty($value)) {
+            $this->serialNumber = $this->generateUniqueSerial($value, $this->toolId);
+        }
+    }
+
+    /**
+     * تولید شماره سریال یکتا مثل Create
+     */
+    private function generateUniqueSerial($category, $ignoreToolId = null)
+    {
+        if (strtolower($category) === 'abzar-') {
+            $prefix = 'abzar-';
+        } elseif (strtoupper($category) === 'IPR' || $category === 'IPR-') {
+            $prefix = 'IPR-';
+        } else {
+            $prefix = $this->customPrefix ? $this->customPrefix . '-' : '200-';
+        }
+
+        $query = ToolsInformation::withTrashed()
+            ->where('serialNumber', 'like', $prefix . '%');
+
+        if ($ignoreToolId) {
+            $query->where('id', '!=', $ignoreToolId);
+        }
+
+        $lastNumber = $query->select(DB::raw("MAX(CAST(SUBSTRING(serialNumber, ".(strlen($prefix)+1).") AS UNSIGNED)) as max_number"))
+            ->value('max_number');
+
+        $nextNumber = $lastNumber ? $lastNumber + 1 : 1;
+        $serial = $prefix . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+
+        while (ToolsInformation::withTrashed()
+            ->where('serialNumber', $serial)
+            ->where('id', '!=', $ignoreToolId)
+            ->exists()) {
+            $nextNumber++;
+            $serial = $prefix . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+        }
+
+        return $serial;
+    }
+
     public function updateTool()
     {
         $info = ToolsInformation::findOrFail($this->toolId);
 
-        // آپدیت محل و ثبت لاگ انتقال
+        // بروزرسانی محل و ثبت لاگ
         $this->updateLocation($this->toolId, $this->StorageLocation);
 
-        // محاسبه مجدد qtyTotal و همسان‌سازی count با آن
-        $qtyrez = $this->qtyDamaged + $this->qtyWritOff + $this->qtyLost;
-        $qtyrez1 = $this->count - $qtyrez;
-        $this->qtyTotal = $qtyrez1;
-        $this->count = $this->qtyTotal; // count را به مقدار qtyTotal برابر می‌کنیم
+        // محاسبه qtyTotal و همسان‌سازی count
+        $this->qtyTotal = $this->count - ($this->qtyDamaged + $this->qtyWritOff + $this->qtyLost);
+        $this->count = $this->qtyTotal;
 
-        // بروزرسانی اطلاعات اصلی ابزار
+        // بروزرسانی ToolsInformation
         $info->update([
             'name' => $this->name,
             'serialNumber' => $this->serialNumber,
@@ -80,7 +123,7 @@ class Index extends Component
         // بروزرسانی جزئیات ابزار
         $info->details()->update([
             'category' => $this->category,
-            'count' => $this->count, // به‌روزرسانی count
+            'count' => $this->count,
             'companynumber' => $this->companynumber,
             'status' => $this->status,
             'model' => $this->model,
@@ -97,7 +140,6 @@ class Index extends Component
             'content' => $this->content,
         ]);
 
-        // ثبت لاگ ویرایش ابزار
         $this->logActivity('edit', $info, "ابزار ویرایش شد: {$info->details->model}");
 
         session()->flash('success', 'اطلاعات با موفقیت به‌روزرسانی شد.');
@@ -105,19 +147,17 @@ class Index extends Component
     }
 
     /**
-     * آپدیت محل ابزار و ثبت در جدول locations
+     * بروزرسانی محل ابزار و ثبت در locations
      */
     public function updateLocation($toolId, $newLocation)
     {
         $tool = ToolsInformation::findOrFail($toolId);
 
-        // آپدیت محل فعلی
         $tool->update([
             'StorageLocation' => $newLocation,
             'Receiver' => $this->Receiver,
         ]);
 
-        // ثبت لاگ تغییر محل
         $tool->locations()->create([
             'location' => $newLocation,
             'Receiver' => $this->Receiver,
